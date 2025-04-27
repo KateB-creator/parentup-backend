@@ -1,0 +1,20 @@
+.navbar-custom {
+    background-color: #ffe3c3 !important; // esempio di rosa tenue
+  
+    .navbar-brand {
+      font-weight: bold;
+      color: #220212;
+      font-size: 38px;
+    }
+  
+    .nav-link {
+      color: #000;
+      font-size: 20px;
+  
+      &:hover {
+        color: #e29a1c;
+        text-decoration: underline;
+      }
+    }
+  }
+  
