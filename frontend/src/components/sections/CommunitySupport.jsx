@@ -22,8 +22,10 @@ function CommunitySupport() {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
+    console.log('Dati che sto inviando:', formData);
+  
     try {
-      const response = await fetch('http://localhost/backend/saveRequest.php', {
+      const response = await fetch('http://localhost/parentup/backend/saveRequest.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -31,7 +33,10 @@ function CommunitySupport() {
         body: JSON.stringify(formData),
       });
   
-      const result = await response.json();
+      const text = await response.text();
+      console.log('Risposta server:', text);
+  
+      const result = JSON.parse(text);
   
       if (response.ok) {
         console.log(result.message);
