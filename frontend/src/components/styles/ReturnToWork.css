@@ -1,0 +1,15 @@
+.return-page h2 {
+  color: #2f4858;
+}
+.return-page .tip-card {
+  background: #e0f7fa;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border-left: 4px solid #00796b;
+}
+.return-page .map-area {
+  height: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+}
