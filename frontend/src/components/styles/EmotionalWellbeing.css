@@ -1,13 +1,14 @@
 .emotional-page h2 {
   color: #6a0572;
+  font-weight: bold;
 }
-.emotional-page .meditation-box {
-  background: #f3e5f5;
-  padding: 1rem;
-  border-radius: 10px;
-  margin-bottom: 1rem;
+.emotional-page .card {
+  border-radius: 12px;
+  transition: transform 0.3s ease-in-out;
 }
-.emotional-page .audio-player {
-  width: 100%;
-  margin-top: 1rem;
+.emotional-page .card:hover {
+  transform: translateY(-5px);
+}
+.emotional-page .btn {
+  font-weight: 500;
 }

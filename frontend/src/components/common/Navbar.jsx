@@ -4,7 +4,7 @@ import '../styles/NavBar.scss';
 
 function Navbar() {
   return (
-    <nav className="navbar-custom navbar navbar-expand-lg navbar-light bg-light px-4">
+    <nav className="navbar-custom navbar navbar-expand-lg navbar-light px-4">
       <Link className="navbar-brand fw-bold" to="/">ParentUp</Link>
       <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span className="navbar-toggler-icon"></span>

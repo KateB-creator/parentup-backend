@@ -1,19 +1,29 @@
 import { Link } from 'react-router-dom';
 import './styles/HomePage.scss';
+import welcomeImage from '../assets/visual_img.png';
 
 
 function HomePage() {
   return (
     <div className="structur-page">
-      <div className="section-welcome">
-        <h1 className="text-center mb-4">Benvenutə su ParentUp!</h1>
-        <p className="text-center mb-5">Un'app inclusiva per supportare genitori e partner nel viaggio post-parto e post-adozione.</p>
-      </div>
+      <div className="container text-center visual">
+        <div className="row align-items-start">
+          <div className="col">
+            <div className="section-welcome">
+            <h1 className="text-center mb-4">Benvenutə su ParentUp!</h1>
+            <p className="text-center mb-5">Un'app inclusiva per supportare genitori e partner nel viaggio post-parto e post-adozione.</p>
+            </div>
+          </div>
+          <div className="col">
+            <img className="visual-image" src={welcomeImage} alt="Benvenuto in ParentUp"/>
+          </div>
+          
+        </div>
+    </div>
+      
       
       <div className="container  g-4  my-5">
         <div className="row">
-
-        
           {/* Card Cura Neonato */}
           <div className="col-md-4">
             <div className="card h-100 shadow">

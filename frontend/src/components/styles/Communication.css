@@ -1,10 +1,32 @@
 .communication-page h2 {
   color: #4a4e69;
+  font-weight: bold;
 }
-.communication-page .diary-entry {
-  background: #fff;
-  border-left: 4px solid #4a4e69;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 6px;
+.communication-page .card {
+  border-radius: 12px;
+  transition: all 0.3s ease-in-out;
+}
+.communication-page .card:hover {
+  transform: translateY(-5px);
+}
+.communication-page .card .btn {
+  margin-top: auto;
+}
+.communication-page .emotion-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.communication-page .emotion-buttons button {
+  font-size: 2rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: #f8f9fa;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+.communication-page .emotion-buttons button:hover {
+  background-color: #d63384;
+  color: white;
+  transform: scale(1.1);
 }

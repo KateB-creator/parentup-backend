@@ -1,15 +1,19 @@
-.return-page h2 {
-  color: #2f4858;
+.container h4 {
+  color: #0d6efd; /* blu Bootstrap */
 }
-.return-page .tip-card {
-  background: #e0f7fa;
-  padding: 1rem;
+
+p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.list-group-item {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
   border-radius: 8px;
-  margin-bottom: 1rem;
-  border-left: 4px solid #00796b;
+  margin-bottom: 10px;
 }
-.return-page .map-area {
-  height: 300px;
-  border-radius: 12px;
-  overflow: hidden;
+
+.list-group-item:hover {
+  background-color: #e2e6ea;
 }
