@@ -25,7 +25,7 @@ function CommunitySupport() {
     console.log('Dati che sto inviando:', formData);
   
     try {
-      const response = await fetch('http://localhost/parentup/backend/saveRequest.php', {
+      const response = await fetch('http://localhost/parentup/backend/saveRequest.php', { // QUI ABSOLUTE URL
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
