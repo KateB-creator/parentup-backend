@@ -1,10 +1,55 @@
-.visual{
+.structur-page{
+  padding-top: 60px;
+   padding-bottom: 60px;
+
+  .hero-section {
     
-    padding: 60px 60px;
-
-
-    .section-welcome{
-        align-self: center;
+    h1{
+      color: #446c9e;
+      font-size: 56px;
+      margin-bottom: 20px;
+    }
+    
+  
+    .text-description {
+      font-size: 1.1rem;
+      color: #555;
     }
 
+    .btn-color{
+      background-color: #fea43f;
+    }
+  
+
+}
+}
+
+
+.structur-card{
+  background: #4c8499;
+  margin-top: 60px;
+  padding-bottom: 40px;
+  padding-top: 40px;   
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.card-text {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.valori-scroll {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+
+  .col-md-3 {
+    scroll-snap-align: start;
+  }
 }

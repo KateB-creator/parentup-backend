@@ -3,26 +3,27 @@ import '../styles/BabyCare.scss';
 import TimelineRoutine from './TimelineRoutine'; 
 import BabyCareGuides from './BabyCareGuides'; 
 
+
 function BabySleepCarousel() {
   return (
     <div id="babySleepCarousel" className="carousel slide my-5" data-bs-ride="carousel">
       <div className="carousel-inner">
         <div className="carousel-item active">
-          <img src="/images/sonno1.jpg" className="d-block w-100" alt="Routine della nanna" />
+        <img src="/assets/sonno3.png" className="d-block w-100" alt="Routine della nanna" />
           <div className="carousel-caption d-none d-md-block">
             <h5>Routine della Nanna</h5>
             <p>Stabilisci una routine serena prima di dormire.</p>
           </div>
         </div>
         <div className="carousel-item">
-          <img src="/images/sonno2.jpg" className="d-block w-100" alt="Ambiente ideale" />
+        <img src="/assets/sonno2.png" className="d-block w-100" alt="Ambiente ideale" />
           <div className="carousel-caption d-none d-md-block">
             <h5>Ambiente Ideale</h5>
             <p>Camera fresca, buia e silenziosa aiuta il riposo.</p>
           </div>
         </div>
         <div className="carousel-item">
-          <img src="/images/sonno3.jpg" className="d-block w-100" alt="Posizione sicura" />
+        <img src="/assets/sonno1.png" className="d-block w-100" alt="Posizione sicura" />
           <div className="carousel-caption d-none d-md-block">
             <h5>Posizione Sicura</h5>
             <p>Sempre supino, su superficie rigida e senza cuscini.</p>
