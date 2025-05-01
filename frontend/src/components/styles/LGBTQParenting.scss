@@ -12,3 +12,18 @@
 .list-group-item:hover {
   background-color: #e2e6ea;
 }
+
+.lgbtq-parenting-page {
+  a {
+    color: #ce3b8b;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  h4 {
+    color: #6c2ca3;
+  }
+}
+

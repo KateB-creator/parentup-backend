@@ -2,52 +2,76 @@ import '../styles/LGBTQParenting.scss';
 
 function LGBTQParenting() {
   return (
-    <div className="container my-5">
-      <h2 className="text-center mb-4">Genitorialità LGBTQ+</h2>
-
-      {/* Introduzione */}
-      <div className="mb-5">
-        <h4>🌈 Accogliamo tutte le famiglie</h4>
-        <p>
-          Ogni famiglia merita amore, rispetto e supporto. In questa sezione troverai risorse dedicate a genitori e famiglie LGBTQ+ per affrontare il meraviglioso viaggio della genitorialità.
-        </p>
-      </div>
+    <div className="container my-5 lgbtq-parenting-page">
+      <h2 className="text-center mb-4">🏳️‍🌈 Genitorialità LGBTQ+</h2>
 
       {/* Tipologie di famiglie */}
-      <div className="mb-5">
-        <h4>👩‍❤️‍👩 👨‍❤️‍👨 Tipologie di Famiglie</h4>
-        <ul className="list-group">
-          <li className="list-group-item">Adozione e affido da parte di coppie LGBTQ+</li>
-          <li className="list-group-item">Co-genitorialità e piani familiari condivisi</li>
-          <li className="list-group-item">Famiglie Arcobaleno: storie di amore e coraggio</li>
+      <section className="mb-5">
+        <h4>👨‍👨‍👧‍👦 Tipologie di Famiglie</h4>
+        <ul className="list-group list-group-flush">
+          <li className="list-group-item">
+            👩‍❤️‍👩 Adozione e affido per coppie omogenitoriali
+            <br />
+            <a href="https://famigliearcobaleno.org/adozioni" target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-outline-primary mt-2">
+              Scopri di più →
+            </a>
+          </li>
+          <li className="list-group-item">
+            👨‍👨‍👧‍👦 Co-genitorialità e famiglie condivise
+            <br />
+            <a href="https://www.retegenitorirainbow.it/cogenitorialita" target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-outline-primary mt-2">
+              Approfondisci →
+            </a>
+          </li>
+          <li className="list-group-item">
+            🌈 Famiglie Arcobaleno: storie di coraggio e amore
+            <br />
+            <a href="https://famigliearcobaleno.org/storie" target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-outline-primary mt-2">
+              Leggi le storie →
+            </a>
+          </li>
         </ul>
-      </div>
+      </section>
 
       {/* Diritti e Legislazione */}
-      <div className="mb-5">
+      <section className="mb-5">
         <h4>⚖️ Diritti e Legislazione</h4>
         <p>
-          La situazione legislativa varia da paese a paese. Ti invitiamo a informarti sui tuoi diritti locali riguardo riconoscimento legale, adozione, tutela e certificazione di nascita.
+          Le leggi variano da paese a paese. Ti invitiamo a informarti sui tuoi diritti riguardo adozione, riconoscimento legale, 
+          e tutela dei figli. Per l’Italia: <a href="https://famigliearcobaleno.org" target="_blank" rel="noopener noreferrer">famigliearcobaleno.org</a>
         </p>
-      </div>
+      </section>
 
       {/* Supporto Emotivo */}
-      <div className="mb-5">
+      <section className="mb-5">
         <h4>💬 Supporto Emotivo</h4>
         <p>
-          La genitorialità LGBTQ+ può incontrare sfide uniche. Non sei solə: cerca supporto attraverso gruppi locali, forum online e professionisti specializzati.
+          La genitorialità LGBTQ+ può incontrare sfide uniche. Non sei solə. 
+          Esistono gruppi, professionisti e comunità pronti ad ascoltarti.
         </p>
-      </div>
+      </section>
 
       {/* Risorse Utili */}
-      <div className="mb-5">
+      <section className="mb-5">
         <h4>📚 Risorse Utili</h4>
-        <ul className="list-group">
-          <li className="list-group-item">Associazioni come Famiglie Arcobaleno e Rete Genitori Rainbow</li>
-          <li className="list-group-item">Libri per bambini che celebrano la diversità familiare</li>
-          <li className="list-group-item">Sportelli di ascolto e consulenza</li>
+        <ul className="list-group list-group-flush">
+          <li className="list-group-item">
+            <a href="https://famigliearcobaleno.org" target="_blank" rel="noopener noreferrer">
+              🌈 Famiglie Arcobaleno – Sostegno, eventi e comunità
+            </a>
+          </li>
+          <li className="list-group-item">
+            <a href="https://www.retegenitorirainbow.it/" target="_blank" rel="noopener noreferrer">
+              🌐 Rete Genitori Rainbow – Ascolto e orientamento
+            </a>
+          </li>
+          <li className="list-group-item">
+            <a href="https://www.tuttotranquillo.it/" target="_blank" rel="noopener noreferrer">
+              📖 Libri e materiali per bambini e bambine inclusivi
+            </a>
+          </li>
         </ul>
-      </div>
+      </section>
     </div>
   );
 }

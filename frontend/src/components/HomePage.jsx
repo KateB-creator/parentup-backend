@@ -1,12 +1,5 @@
 import { Link } from 'react-router-dom';
 import './styles/HomePage.scss';
-import welcomeImage from '../assets/visual_img.png';
-import imgBabyCare from '../assets/baby-care.svg';
-import imgLgbtq from '../assets/lgbtq.svg';
-import imgReturnToWork from '../assets/work.svg';
-import imgCommunication from '../assets/comunicazione.svg';
-import imgWellbeing from '../assets/benessere.svg';
-import imgCommunity from '../assets/community.svg';
 import { useEffect, useState } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -70,7 +63,7 @@ function HomePage() {
 
               {/* Immagine */}
               <div className="col-md-6 text-center">
-                <img src={welcomeImage} alt="Benvenuto in ParentUp" className="img-fluid " style={{ maxHeight: '500px' }} />
+                <img src="/assets/visual_img.png" alt="Benvenuto in ParentUp" className="img-fluid " style={{ maxHeight: '500px' }} />
               </div>
             </div>
           </div>
@@ -84,7 +77,7 @@ function HomePage() {
             {/* Card Cura Neonato */}
             <div className="col-md-4">
               <div className="card h-100 shadow">
-              <img src={imgBabyCare} className="card-img-top" alt="Cura del neonato" />
+              <img src="/assets/baby-care.svg" className="card-img-top" alt="Cura del neonato" />
                 <div className="card-body">
                   <h5 className="card-title">🍼 Cura del Neonato</h5>
                   <p className="card-text">Scopri consigli su allattamento, svezzamento, routine e crescita.</p>
@@ -95,7 +88,7 @@ function HomePage() {
             {/* Card Comunicazione */}
             <div className="col-md-4">
               <div className="card h-100 shadow">
-              <img src={imgCommunication} className="card-img-top" alt="Comunicazione" />
+              <img src="/assets/comunicazione.svg" className="card-img-top" alt="Comunicazione" />
                 <div className="card-body">
                   <h5 className="card-title">💬 Comunicazione</h5>
                   <p className="card-text">Diario condiviso, calendario familiare e spazio per rafforzare la coppia.</p>
@@ -106,7 +99,7 @@ function HomePage() {
             {/* Card Genitorialità LGBTQ+ */}
             <div className="col-md-4">
               <div className="card h-100 shadow">
-              <img src={imgLgbtq} className="card-img-top" alt="Genitorialità LGBTQ+" />
+              <img src="/assets/lgbtq.svg" className="card-img-top" alt="Genitorialità LGBTQ+" />
                 <div className="card-body">
                   <h5 className="card-title">🏳️‍🌈 Genitorialità LGBTQ+</h5>
                   <p className="card-text">Risorse, podcast e mappa dei servizi LGBTQ+ friendly.</p>
@@ -117,7 +110,7 @@ function HomePage() {
             {/* Card Rientro al lavoro */}
             <div className="col-md-4">
               <div className="card h-100 shadow">
-              <img src={imgReturnToWork} className="card-img-top" alt="Rientro al lavoro" />
+              <img src="/assets/work.svg" className="card-img-top" alt="Rientro al lavoro" />
                 <div className="card-body">
                   <h5 className="card-title">🏢 Rientro al lavoro</h5>
                   <p className="card-text">Consigli pratici, diario di rientro, gestione della routine familiare.</p>
@@ -128,7 +121,7 @@ function HomePage() {
             {/* Card Benessere Emotivo */}
             <div className="col-md-4">
               <div className="card h-100 shadow">
-              <img src={imgWellbeing} className="card-img-top" alt="Benessere emotivo" />
+              <img src="/assets/benessere.svg" className="card-img-top" alt="Benessere emotivo" />
                 <div className="card-body">
                   <h5 className="card-title">🧘 Benessere Emotivo</h5>
                   <p className="card-text">Meditazioni, esercizi di rilassamento, diario emotivo.</p>
@@ -139,7 +132,7 @@ function HomePage() {
             {/* Card Community */}
             <div className="col-md-4">
               <div className="card h-100 shadow">
-              <img src={imgCommunity} className="card-img-top" alt="Community" />
+              <img src="/assets/community.svg" className="card-img-top" alt="Community" />
                 <div className="card-body">
                   <h5 className="card-title">🤝 Community</h5>
                   <p className="card-text">Forum, gruppi tematici e incontri online tra genitori.</p>
@@ -183,7 +176,6 @@ function HomePage() {
     </div>
   </div>
 </section>
-
 
       {/* ARTICLE ACCORDION SECTION */}
       <ArticleAccordionSection />

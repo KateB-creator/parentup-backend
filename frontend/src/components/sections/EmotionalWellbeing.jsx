@@ -1,70 +1,73 @@
+// 1. In EmotionalWellbeing.jsx (modifica esistente)
+import { useState, useEffect } from 'react';
 import '../styles/EmotionalWellbeing.scss';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
 function EmotionalWellbeing() {
+  const [resources, setResources] = useState([]);
+  const [activeModal, setActiveModal] = useState(null);
+
+  useEffect(() => {
+    fetch('http://localhost/parentup/backend/api/getWellbeingResources.php')
+      .then(res => res.json())
+      .then(data => setResources(data))
+      .catch(err => console.error('Errore nel caricamento risorse:', err));
+  }, []);
+
+  const handleOpenModal = (resource) => {
+    setActiveModal(resource);
+  };
+
+  const handleCloseModal = () => {
+    setActiveModal(null);
+  };
+
   return (
     <main className="emotional-page container py-5">
-      <h2 className="mb-4">Benessere emotivo e mentale</h2>
-      <p className="mb-5">Strumenti per prenderti cura di te stesso durante il percorso post-parto o post-adozione.</p>
 
-      <div className="row g-4">
-        {/* Meditazioni brevi */}
-        <div className="col-md-6">
-          <div className="card shadow-sm h-100">
-            <div className="card-body d-flex flex-column">
-              <h5 className="card-title">🧘‍♂️ Meditazioni brevi</h5>
-              <p className="card-text flex-grow-1">Ascolta meditazioni guidate di pochi minuti per ritrovare calma ed energia.</p>
-              <button className="btn btn-outline-primary mt-auto">Ascolta meditazione</button>
-            </div>
-          </div>
-        </div>
-
-        {/* Esercizi di respiro */}
-        <div className="col-md-6">
-          <div className="card shadow-sm h-100">
-            <div className="card-body d-flex flex-column">
-              <h5 className="card-title">🌬️ Esercizi di respiro</h5>
-              <p className="card-text flex-grow-1">Scopri semplici tecniche di respiro per gestire stress e ansia.</p>
-              <button className="btn btn-outline-primary mt-auto">Scopri esercizi</button>
-            </div>
-          </div>
-        </div>
-
-        {/* Mini podcast motivazionali */}
-        <div className="col-md-6">
-          <div className="card shadow-sm h-100">
-            <div className="card-body d-flex flex-column">
-              <h5 className="card-title">🎧 Mini podcast motivazionali</h5>
-              <p className="card-text flex-grow-1">Ascolta storie brevi per ritrovare ispirazione nei momenti difficili.</p>
-              <button className="btn btn-outline-primary mt-auto">Ascolta podcast</button>
-            </div>
-          </div>
-        </div>
-
-        {/* Diario delle emozioni */}
-        <div className="col-md-6">
-          <div className="card shadow-sm h-100">
-            <div className="card-body d-flex flex-column">
-              <h5 className="card-title">📝 Diario delle emozioni</h5>
-              <p className="card-text flex-grow-1">Scrivi e monitora il tuo stato emotivo giorno per giorno.</p>
-              <button className="btn btn-outline-primary mt-auto">Scrivi nel diario</button>
-            </div>
-          </div>
-        </div>
-
-        {/* Accesso a specialisti */}
-        <div className="col-12">
-          <div className="card shadow-sm h-100">
-            <div className="card-body d-flex flex-column align-items-center text-center">
-              <h5 className="card-title">👩‍⚕️ Accesso a specialisti</h5>
-              <p className="card-text">
-                Trova supporto da psicologi, ostetriche, counselor specializzati nel post-parto e nella genitorialità.
-              </p>
-              <button className="btn btn-primary mt-3">Contatta uno specialista</button>
-            </div>
-          </div>
-        </div>
-
+      <div className='visual-benessere'>
+        <div className='container-text'>
+        <h2 className="mb-4">Benessere emotivo e mentale</h2>
+        <p className="mb-3">Strumenti per prenderti cura di te stesso durante il percorso post-parto o post-adozione.</p>
+        </div> 
       </div>
+      
+
+      {/* Mini banner illustrato */}
+      
+      <div className="row g-4">
+        {resources.map((item, i) => (
+          <div key={i} className={`col-md-6 ${item.type === 'specialist' ? 'col-12' : ''}`}>
+            <div className="card shadow-sm h-100">
+              <div className={`card-body d-flex flex-column ${item.type === 'specialist' ? 'text-center align-items-center' : ''}`}>
+                <h5 className="card-title">{item.icon} {item.title}</h5>
+                <p className="card-text flex-grow-1">{item.description}</p>
+                <Button variant={item.type === 'specialist' ? 'primary' : 'outline-primary'} onClick={() => handleOpenModal(item)} className="mt-auto">
+                  {item.buttonText}
+                </Button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {activeModal && (
+        <Modal show={true} onHide={handleCloseModal} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>{activeModal.icon} {activeModal.title}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>{activeModal.description}</p>
+          </Modal.Body>
+          <Modal.Footer className="d-flex justify-content-between w-100">
+            <a href={activeModal.buttonLink} target="_blank" rel="noopener noreferrer" className="btn btn-outline-secondary">
+              Apri contenuto
+            </a>
+            <Button variant="secondary" onClick={handleCloseModal}>Chiudi</Button>
+          </Modal.Footer>
+        </Modal>
+      )}
     </main>
   );
 }
