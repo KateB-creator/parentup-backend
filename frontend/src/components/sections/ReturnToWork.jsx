@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import '../styles/ReturnToWork.scss';
 
 function ReturnToWork() {
+
   // Checklist
   const initialTasks = [
     { id: 1, text: "Organizzare l'assistenza all'infanzia", done: false },
@@ -29,6 +30,26 @@ function ReturnToWork() {
     ));
   };
 
+  useEffect(() => {
+    const fetchReturnToWorkData = async () => {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const res = await fetch('http://localhost/parentup/backend/api/return_to_work/get_return_to_work.php', {
+        headers: {
+          'Authorization': `Bearer ${user.token}`
+        }
+      });
+      const data = await res.json();
+      if (data) {
+        if (Array.isArray(data.checklist)) setTasks(data.checklist);
+        if (typeof data.planner === 'object') setPlans(data.planner);
+        if (typeof data.formData === 'object') setFormData(data.formData);
+      }
+    };
+  
+    fetchReturnToWorkData();
+  }, []);
+  
+
   const completedCount = tasks.filter(task => task.done).length;
   const totalCount = tasks.length;
   const progressPercent = Math.round((completedCount / totalCount) * 100);
@@ -52,10 +73,30 @@ function ReturnToWork() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    await saveAllData();
+    alert('Piano salvato!');
   };
+
+  const saveAllData = async () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+  
+    await fetch('http://localhost/parentup/backend/api/return_to_work/save_return_to_work.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user.token}`
+      },
+      body: JSON.stringify({
+        checklist: tasks,
+        planner: plans,
+        formData: formData
+      })
+    });
+  };
+
+  
 
   // Mappa parcheggi rosa
   const pinkIcon = new L.Icon({
