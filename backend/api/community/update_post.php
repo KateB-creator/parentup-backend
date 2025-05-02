@@ -5,14 +5,29 @@ header('Access-Control-Allow-Headers: Content-Type');
 
 require_once(__DIR__ . '/../db.php');
 
-$data = json_decode(file_get_contents("php://input"), true);
+// Dati ricevuti in JSON
+$data = json_decode(file_get_contents('php://input'), true);
+$postId = $data['id'] ?? null;
+$newMessage = $data['message'] ?? '';
+$userId = $data['user_id'] ?? null;
 
-if (empty($data['id']) || empty($data['message'])) {
-    echo json_encode(['error' => 'ID e contenuto richiesti.']);
+if (!$postId || !$newMessage || !$userId) {
+    echo json_encode(['error' => 'Dati mancanti.']);
     exit;
 }
 
-$stmt = $pdo->prepare("UPDATE community_posts SET message = ? WHERE id = ?");
-$stmt->execute([$data['message'], $data['id']]);
+// Verifica che il post appartenga all'utente
+$checkStmt = $pdo->prepare("SELECT user_id FROM community_posts WHERE id = ?");
+$checkStmt->execute([$postId]);
+$post = $checkStmt->fetch(PDO::FETCH_ASSOC);
 
-echo json_encode(['success' => true, 'message' => 'Post aggiornato.']);
+if (!$post || $post['user_id'] != $userId) {
+    echo json_encode(['error' => 'Non autorizzato a modificare questo post.']);
+    exit;
+}
+
+// Aggiorna il messaggio del post
+$updateStmt = $pdo->prepare("UPDATE community_posts SET message = ? WHERE id = ?");
+$updateStmt->execute([$newMessage, $postId]);
+
+echo json_encode(['success' => true, 'message' => 'Post aggiornato con successo.']);

@@ -5,14 +5,41 @@ header('Access-Control-Allow-Headers: Content-Type');
 
 require_once(__DIR__ . '/../db.php');
 
-$data = json_decode(file_get_contents("php://input"), true);
+// Crea la cartella uploads se non esiste
+$uploadDir = __DIR__ . '/../../../uploads/';
+if (!file_exists($uploadDir)) {
+    mkdir($uploadDir, 0755, true);
+}
 
-if (empty($data['post_id']) || empty($data['name']) || empty($data['comment'])) {
-    echo json_encode(['error' => 'Tutti i campi sono obbligatori.']);
+// Variabili iniziali
+$name = $_POST['name'] ?? '';
+$message = $_POST['message'] ?? '';
+$mediaUrl = null;
+
+if (empty($name) || empty($message)) {
+    echo json_encode(['error' => 'Nome e messaggio sono obbligatori.']);
     exit;
 }
 
-$stmt = $pdo->prepare("INSERT INTO community_comments (post_id, name, comment) VALUES (?, ?, ?)");
-$stmt->execute([$data['post_id'], $data['name'], $data['comment']]);
+// Gestione upload file (immagine o video)
+if (!empty($_FILES['media']) && $_FILES['media']['error'] === UPLOAD_ERR_OK) {
+    $fileTmp = $_FILES['media']['tmp_name'];
+    $fileName = basename($_FILES['media']['name']);
+    $targetPath = $uploadDir . $fileName;
 
-echo json_encode(['success' => true, 'message' => 'Commento salvato con successo.']);
+    // Evita sovrascritture aggiungendo un timestamp
+    $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+    $baseName = pathinfo($fileName, PATHINFO_FILENAME);
+    $newName = $baseName . '_' . time() . '.' . $extension;
+    $targetPath = $uploadDir . $newName;
+
+    if (move_uploaded_file($fileTmp, $targetPath)) {
+        $mediaUrl = '/uploads/' . $newName; // path da salvare nel DB
+    }
+}
+
+// Salvataggio nel DB
+$stmt = $pdo->prepare("INSERT INTO community_posts (name, message, media_url) VALUES (?, ?, ?)");
+$stmt->execute([$name, $message, $mediaUrl]);
+
+echo json_encode(['success' => true, 'message' => 'Post pubblicato con successo.']);

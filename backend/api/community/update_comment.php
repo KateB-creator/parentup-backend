@@ -5,14 +5,29 @@ header('Access-Control-Allow-Headers: Content-Type');
 
 require_once(__DIR__ . '/../db.php');
 
-$data = json_decode(file_get_contents("php://input"), true);
+// Ricezione dati
+$data = json_decode(file_get_contents('php://input'), true);
+$commentId = $data['id'] ?? null;
+$newComment = $data['comment'] ?? '';
+$userId = $data['user_id'] ?? null;
 
-if (empty($data['id']) || empty($data['comment'])) {
-    echo json_encode(['error' => 'ID e testo commento richiesti.']);
+if (!$commentId || !$newComment || !$userId) {
+    echo json_encode(['error' => 'Dati mancanti.']);
     exit;
 }
 
-$stmt = $pdo->prepare("UPDATE community_comments SET comment = ? WHERE id = ?");
-$stmt->execute([$data['comment'], $data['id']]);
+// Verifica se il commento appartiene all'utente
+$checkStmt = $pdo->prepare("SELECT user_id FROM community_comments WHERE id = ?");
+$checkStmt->execute([$commentId]);
+$comment = $checkStmt->fetch(PDO::FETCH_ASSOC);
 
-echo json_encode(['success' => true, 'message' => 'Commento aggiornato.']);
+if (!$comment || $comment['user_id'] != $userId) {
+    echo json_encode(['error' => 'Non autorizzato a modificare questo commento.']);
+    exit;
+}
+
+// Aggiornamento commento
+$updateStmt = $pdo->prepare("UPDATE community_comments SET comment = ? WHERE id = ?");
+$updateStmt->execute([$newComment, $commentId]);
+
+echo json_encode(['success' => true, 'message' => 'Commento aggiornato con successo.']);

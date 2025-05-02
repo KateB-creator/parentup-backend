@@ -5,14 +5,14 @@ header('Access-Control-Allow-Headers: Content-Type');
 
 require_once(__DIR__ . '/../db.php');
 
-$data = json_decode(file_get_contents("php://input"), true);
+$data = json_decode(file_get_contents('php://input'), true);
+$commentId = $data['id'] ?? null;
 
-if (empty($data['id'])) {
-    echo json_encode(['error' => 'ID del commento mancante.']);
-    exit;
+if (!$commentId) {
+  echo json_encode(['error' => 'ID commento mancante']);
+  exit;
 }
 
-$stmt = $pdo->prepare("DELETE FROM community_comments WHERE id = ?");
-$stmt->execute([$data['id']]);
+$pdo->prepare("DELETE FROM community_comments WHERE id = ?")->execute([$commentId]);
 
-echo json_encode(['success' => true, 'message' => 'Commento eliminato.']);
+echo json_encode(['success' => true, 'message' => 'Commento eliminato']);
