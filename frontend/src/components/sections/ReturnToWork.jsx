@@ -1,11 +1,30 @@
 import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import '../styles/ReturnToWork.scss';
 
-function ReturnToWork() {
+// Fix icone Leaflet
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: new URL('leaflet/dist/images/marker-icon-2x.png', import.meta.url).href,
+  iconUrl: new URL('leaflet/dist/images/marker-icon.png', import.meta.url).href,
+  shadowUrl: new URL('leaflet/dist/images/marker-shadow.png', import.meta.url).href,
+});
 
+// Componente per aggiungere un nuovo parcheggio rosa
+function AddParkingMarker({ onAdd }) {
+  useMapEvents({
+    click(e) {
+      const confirmAdd = window.confirm('Vuoi aggiungere un nuovo parcheggio rosa qui?');
+      if (confirmAdd) {
+        onAdd({ lat: e.latlng.lat, lng: e.latlng.lng });
+      }
+    }
+  });
+  return null;
+}
+
+function ReturnToWork() {
   // Checklist
   const initialTasks = [
     { id: 1, text: "Organizzare l'assistenza all'infanzia", done: false },
@@ -17,57 +36,109 @@ function ReturnToWork() {
 
   const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem('returnToWorkTasks');
-    return saved ? JSON.parse(saved) : initialTasks;
+    try {
+      const parsed = JSON.parse(saved);
+      return Array.isArray(parsed) && parsed.length > 0 ? parsed : initialTasks;
+    } catch {
+      return initialTasks;
+    }
   });
+
+  const [plans, setPlans] = useState({});
+  const [formData, setFormData] = useState({ childcare: '', workHours: '', supportNeeded: '' });
+  const [userPosition, setUserPosition] = useState(null);
+  const [parkingSpots, setParkingSpots] = useState([]);
+
+  const completedCount = tasks.filter(task => task.done).length;
+  const totalCount = tasks.length;
+  const progressPercent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+  const days = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica"];
+
+  const carIcon = new L.Icon({
+    iconUrl: '/icons/car.png',
+    iconSize: [35, 35],
+    iconAnchor: [17, 35],
+    popupAnchor: [0, -30],
+  });
+
+  const handleLocate = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserPosition({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          });
+        },
+        () => alert('Impossibile ottenere la tua posizione.')
+      );
+    } else {
+      alert('Geolocalizzazione non supportata dal browser.');
+    }
+  };
+
+  useEffect(() => {
+    fetch('http://localhost/parentup/backend/api/parking/get_all.php')
+      .then(res => res.json())
+      .then(data => setParkingSpots(data))
+      .catch(err => console.error(err));
+  }, []);
+
+  const handleAddParking = (spot) => {
+    fetch('http://localhost/parentup/backend/api/parking/add.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(spot)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) setParkingSpots(prev => [...prev, spot]);
+        else alert('Errore nel salvataggio del parcheggio.');
+      })
+      .catch(err => console.error(err));
+  };
 
   useEffect(() => {
     localStorage.setItem('returnToWorkTasks', JSON.stringify(tasks));
   }, [tasks]);
 
-  const toggleTask = (id) => {
-    setTasks(tasks.map(task =>
-      task.id === id ? { ...task, done: !task.done } : task
-    ));
-  };
-
   useEffect(() => {
     const fetchReturnToWorkData = async () => {
       const user = JSON.parse(localStorage.getItem('user'));
-      const res = await fetch('http://localhost/parentup/backend/api/return_to_work/get_return_to_work.php', {
-        headers: {
-          'Authorization': `Bearer ${user.token}`
+      try {
+        const res = await fetch('http://localhost/parentup/backend/api/return_to_work/get_return_to_work.php', {
+          headers: { 'Authorization': `Bearer ${user.token}` }
+        });
+        if (!res.ok) throw new Error('Errore nel fetch');
+        const data = await res.json();
+        if (data) {
+          if (Array.isArray(data.checklist) && data.checklist.length > 0) {
+            setTasks(data.checklist);
+          }
+          if (typeof data.planner === 'object') setPlans(data.planner);
+          if (typeof data.formData === 'object') {
+            setFormData({
+              childcare: data.formData.childcare || '',
+              workHours: data.formData.workHours || '',
+              supportNeeded: data.formData.supportNeeded || ''
+            });
+          }
         }
-      });
-      const data = await res.json();
-      if (data) {
-        if (Array.isArray(data.checklist)) setTasks(data.checklist);
-        if (typeof data.planner === 'object') setPlans(data.planner);
-        if (typeof data.formData === 'object') setFormData(data.formData);
+      } catch (error) {
+        console.error("Errore nel fetch dati:", error);
       }
     };
-  
     fetchReturnToWorkData();
   }, []);
   
 
-  const completedCount = tasks.filter(task => task.done).length;
-  const totalCount = tasks.length;
-  const progressPercent = Math.round((completedCount / totalCount) * 100);
-
-  // Planner settimanale
-  const days = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica"];
-  const [plans, setPlans] = useState({});
+  const toggleTask = (id) => {
+    setTasks(tasks.map(task => task.id === id ? { ...task, done: !task.done } : task));
+  };
 
   const handlePlanChange = (day, value) => {
     setPlans({ ...plans, [day]: value });
   };
-
-  // Form interattivo
-  const [formData, setFormData] = useState({
-    childcare: '',
-    workHours: '',
-    supportNeeded: '',
-  });
 
   const handleFormChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -75,13 +146,7 @@ function ReturnToWork() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    await saveAllData();
-    alert('Piano salvato!');
-  };
-
-  const saveAllData = async () => {
     const user = JSON.parse(localStorage.getItem('user'));
-  
     await fetch('http://localhost/parentup/backend/api/return_to_work/save_return_to_work.php', {
       method: 'POST',
       headers: {
@@ -94,46 +159,8 @@ function ReturnToWork() {
         formData: formData
       })
     });
+    alert('Piano salvato!');
   };
-
-  
-
-  // Mappa parcheggi rosa
-  const pinkIcon = new L.Icon({
-    iconUrl: '/icons/car.png',
-    iconSize: [32, 32],
-    iconAnchor: [16, 32],
-    popupAnchor: [0, -32],
-  });
-
-  const pinkParkingLocations = [
-    { lat: 39.2240, lng: 9.1215 },
-    { lat: 39.2235, lng: 9.1220 },
-  ];
-
-  function LocateButton() {
-    const map = useMap();
-
-    const handleLocate = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          map.flyTo([position.coords.latitude, position.coords.longitude], 15);
-        }, () => {
-          alert('Impossibile ottenere la tua posizione.');
-        });
-      } else {
-        alert('Geolocalizzazione non supportata dal browser.');
-      }
-    };
-
-    return (
-      <div className="text-center mb-3">
-        <button className="btn btn-success" onClick={handleLocate}>
-          📍 Trova la tua posizione
-        </button>
-      </div>
-    );
-  }
 
   return (
     <div className="container my-5">
@@ -174,7 +201,7 @@ function ReturnToWork() {
         </ul>
       </div>
 
-      {/* Planner Settimanale */}
+      {/* Planner */}
       <div className="my-5">
         <h3 className="mb-4">Planner Settimanale</h3>
         {days.map(day => (
@@ -185,71 +212,76 @@ function ReturnToWork() {
               className="form-control"
               value={plans[day] || ''}
               onChange={(e) => handlePlanChange(day, e.target.value)}
-              placeholder={`Inserisci gli impegni per ${day}`}
+              placeholder={`Impegni per ${day}`}
             />
           </div>
         ))}
       </div>
 
-      {/* Form Interattivo */}
+      {/* Form personalizzato */}
       <div className="my-5">
-        <h3 className="mb-4">Personalizza il tuo Piano di Rientro</h3>
+        <h3 className="mb-4">Personalizza il tuo Piano</h3>
         <form onSubmit={handleFormSubmit}>
           <div className="mb-3">
-            <label className="form-label">Assistenza all'infanzia</label>
+            <label className="form-label">Assistenza</label>
             <input
               type="text"
               className="form-control"
               name="childcare"
               value={formData.childcare}
               onChange={handleFormChange}
-              placeholder="Es. Nonni, Asilo nido, Baby-sitter"
             />
           </div>
           <div className="mb-3">
-            <label className="form-label">Orari di lavoro desiderati</label>
+            <label className="form-label">Orari di lavoro</label>
             <input
               type="text"
               className="form-control"
               name="workHours"
               value={formData.workHours}
               onChange={handleFormChange}
-              placeholder="Es. Part-time, Full-time, Flessibile"
             />
           </div>
           <div className="mb-3">
-            <label className="form-label">Supporto necessario</label>
+            <label className="form-label">Supporto</label>
             <textarea
               className="form-control"
               name="supportNeeded"
               value={formData.supportNeeded}
               onChange={handleFormChange}
-              placeholder="Es. Spazio per allattamento, Orari flessibili"
             />
           </div>
           <button type="submit" className="btn btn-primary">Salva Piano</button>
         </form>
       </div>
 
-      {/* Mappa Parcheggi Rosa con OpenStreetMap */}
+      {/* Mappa parcheggi */}
       <div className="my-5">
-        <h3 className="mb-4">Parcheggi Rosa Vicino a Te</h3>
-        <MapContainer center={[39.2238, 9.1217]} zoom={13} style={{ height: '400px', width: '100%' }}>
-          <TileLayer
-            attribution='&copy; OpenStreetMap contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          {pinkParkingLocations.map((location, index) => (
-            <Marker
-              key={index}
-              position={[location.lat, location.lng]}
-              icon={pinkIcon}
-            >
-              <Popup>Parcheggio Rosa</Popup>
-            </Marker>
-          ))}
-          <LocateButton />
-        </MapContainer>
+        <h3 className="mb-4">📍 Parcheggi Rosa Vicino a Te</h3>
+        <p>Clicca sulla mappa per aggiungere nuovi parcheggi. La tua posizione è in blu.</p>
+        <button className="btn btn-success mb-3" onClick={handleLocate}>
+          📍 Trova la tua posizione
+        </button>
+
+        <div className="map-container" style={{ height: '500px', width: '100%' }}>
+          <MapContainer center={userPosition || [41.9, 12.5]} zoom={13} style={{ height: '100%', width: '100%' }}>
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution="&copy; OpenStreetMap contributors"
+            />
+            {userPosition && (
+              <Marker position={userPosition} icon={carIcon}>
+                <Popup>La tua posizione</Popup>
+              </Marker>
+            )}
+            {parkingSpots.map((spot, i) => (
+              <Marker key={i} position={[spot.lat, spot.lng]} icon={carIcon}>
+                <Popup>Parcheggio rosa</Popup>
+              </Marker>
+            ))}
+            <AddParkingMarker onAdd={handleAddParking} />
+          </MapContainer>
+        </div>
       </div>
     </div>
   );

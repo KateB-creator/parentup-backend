@@ -80,14 +80,14 @@ function CommunitySupport() {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ id }) // <-- questo è fondamentale
+      body: JSON.stringify({ id })
     });
   
     const result = await res.json();
     console.log(result);
   
     if (result.success) {
-      fetchPosts(); // aggiorna i post
+      fetchPosts(); 
     } else {
       alert(result.error || 'Errore nella cancellazione');
     }

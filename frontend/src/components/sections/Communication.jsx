@@ -3,21 +3,70 @@ import { Link } from 'react-router-dom';
 import '../styles/Communication.scss';
 
 function Communication() {
-  
+  const [user] = useState(() => {
+    const saved = localStorage.getItem('user');
+    return saved ? JSON.parse(saved) : null;
+  });
+
   const [diaryEntry, setDiaryEntry] = useState('');
   const [savedMessage, setSavedMessage] = useState('');
-
-  const handleSave = () => {
-    setSavedMessage(diaryEntry);
-    setDiaryEntry(''); // svuota la textarea dopo il salvataggio
-  };
-
   const [emotion, setEmotion] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleEmotion = (selectedEmotion) => {
     setEmotion(selectedEmotion);
   };
-  
+
+  const handleSave = async () => {
+    if (!user || !user.token) {
+      alert('Utente non autenticato');
+      return;
+    }
+
+    if (!diaryEntry.trim()) {
+      alert('Scrivi prima qualcosa nel diario.');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await fetch('http://localhost/parentup/backend/api/diary/save_diary_entry.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`
+        },
+        body: JSON.stringify({ entry: diaryEntry, emotion })
+      });
+
+      const text = await res.text();
+      console.log('📦 Risposta server:', text);
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (err) {
+        console.error('❌ Risposta non JSON:', err);
+        alert('Errore nel formato della risposta dal server.');
+        return;
+      }
+
+      if (data.success) {
+        setSavedMessage(diaryEntry);
+        setDiaryEntry('');
+        setEmotion('');
+      } else {
+        alert('Errore nel salvataggio.');
+      }
+    } catch (err) {
+      console.error('❌ Errore fetch:', err);
+      alert('Errore nella comunicazione con il server.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="communication-page container py-5">
       <h2 className="mb-4">Comunicazione con l’altro genitore</h2>
@@ -36,11 +85,14 @@ function Communication() {
                 value={diaryEntry}
                 onChange={(e) => setDiaryEntry(e.target.value)}
               ></textarea>
-              <button className="btn btn-primary" onClick={handleSave}>
+              <button className="btn btn-primary" onClick={handleSave} disabled={loading}>
                 Salva nota
               </button>
 
-              {/* Mostra il messaggio salvato */}
+              {loading && (
+                <div className="text-info mt-2">⏳ Salvataggio in corso...</div>
+              )}
+
               {savedMessage && (
                 <div className="alert alert-success mt-4" role="alert">
                   Nota salvata: <br /> <em>{savedMessage}</em>
@@ -50,26 +102,17 @@ function Communication() {
           </div>
         </div>
 
-        {/* Schede "Come sto" */}
-        
+        {/* Emozioni */}
         <div className="col-12">
           <div className="card h-100 shadow-sm">
             <div className="card-body d-flex flex-column align-items-center">
               <h5 className="card-title">💬 Come mi sento oggi?</h5>
-              
               <div className="emotion-buttons my-3">
-                <button className="btn btn-light mx-2" onClick={() => handleEmotion('😊 Felice')}>
-                  😊
-                </button>
-                <button className="btn btn-light mx-2" onClick={() => handleEmotion('😢 Triste')}>
-                  😢
-                </button>
-                <button className="btn btn-light mx-2" onClick={() => handleEmotion('😠 Arrabbiato')}>
-                  😠
-                </button>
-                <button className="btn btn-light mx-2" onClick={() => handleEmotion('😴 Stanco')}>
-                  😴
-                </button>
+                {['😊 Felice', '😢 Triste', '😠 Arrabbiato', '😴 Stanco'].map(e => (
+                  <button key={e} className="btn btn-light mx-2" onClick={() => handleEmotion(e)}>
+                    {e.split(' ')[0]}
+                  </button>
+                ))}
               </div>
 
               {emotion && (
@@ -81,8 +124,7 @@ function Communication() {
           </div>
         </div>
 
-
-        {/* Calendario familiare */}
+        {/* Calendario */}
         <div className="col-md-6">
           <div className="card h-100 shadow-sm">
             <div className="card-body d-flex flex-column">
@@ -95,7 +137,7 @@ function Communication() {
           </div>
         </div>
 
-        {/* Spazio "Noi due" */}
+        {/* Spazio coppia */}
         <div className="col-md-6">
           <div className="card h-100 shadow-sm">
             <div className="card-body d-flex flex-column">

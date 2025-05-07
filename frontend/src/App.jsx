@@ -13,6 +13,7 @@ import LoginPage from './components/auth/LoginPage';
 import RegisterPage from './components/auth/RegisterPage';
 import UserDashboard from './components/auth/UserDashboard';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import ParentJournal from './components/sections/ParentJournal';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -39,6 +40,7 @@ function App() {
             <Route path="/community-support" element={<CommunitySupport />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/login" element={<LoginPage onLogin={setUser} />} />
+            <Route path="/parent-journal" element={<ParentJournal />} />
             <Route
               path="/dashboard"
               element={

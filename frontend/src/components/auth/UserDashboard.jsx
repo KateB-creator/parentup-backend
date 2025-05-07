@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function UserDashboard({ user, onLogout }) {
   const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState(null);
+  const [partnerEmail, setPartnerEmail] = useState('');
+  const [partnerResponse, setPartnerResponse] = useState('');
 
   useEffect(() => {
     if (!user) {
@@ -20,6 +23,14 @@ function UserDashboard({ user, onLogout }) {
   useEffect(() => {
     if (!user) return;
 
+    fetch('http://localhost/parentup/backend/api/diary/fetch_shared_diary.php', {
+  headers: { Authorization: `Bearer ${user.token}` }
+})
+  .then(res => res.json())
+  .then(entry => {
+    setDashboardData(prev => ({ ...prev, sharedDiary: entry }));
+  });
+
     fetch('http://localhost/parentup/backend/api/dashboard/fetch_dashboard_data.php', {
       headers: { Authorization: `Bearer ${user.token}` }
     })
@@ -34,10 +45,44 @@ function UserDashboard({ user, onLogout }) {
     navigate('/login');
   };
 
+  const handleSetPartner = async () => {
+    try {
+      const res = await fetch('http://localhost/parentup/backend/api/user/set_partner.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`
+        },
+        body: JSON.stringify({ partner_email: partnerEmail })
+      });
+
+      const data = await res.json();
+      setPartnerResponse(data.message || 'Operazione completata.');
+    } catch (err) {
+      setPartnerResponse('Errore durante il collegamento del partner.');
+    }
+  };
+
   return (
     <div className="container my-5">
       <h2 className="mb-4">Ciao {user?.name || 'utente'}!</h2>
       <p>Benvenuto nella tua dashboard personale.</p>
+
+      {/* Collegamento partner */}
+      <div className="card mb-4">
+        <div className="card-body">
+          <h5 className="card-title">🔗 Collega il tuo partner</h5>
+          <input
+            type="email"
+            className="form-control mb-2"
+            placeholder="Email del partner"
+            value={partnerEmail}
+            onChange={(e) => setPartnerEmail(e.target.value)}
+          />
+          <button className="btn btn-outline-primary" onClick={handleSetPartner}>Salva partner</button>
+          {partnerResponse && <div className="mt-3 alert alert-info">{partnerResponse}</div>}
+        </div>
+      </div>
 
       {/* Statistiche rapide */}
       <div className="row row-cols-1 row-cols-md-2 g-4 my-4">
@@ -89,10 +134,10 @@ function UserDashboard({ user, onLogout }) {
       {/* Accesso rapido alle sezioni */}
       <h4 className="mt-5">Accesso rapido</h4>
       <div className="d-grid gap-2 mt-3">
-        <button className="btn btn-outline-primary">📘 Diario post-parto</button>
-        <button className="btn btn-outline-success">🧘‍♀️ Area benessere</button>
-        <button className="btn btn-outline-info">📍 Parcheggi rosa salvati</button>
-        <button className="btn btn-outline-secondary">👨‍👩‍👧 Diario condiviso con partner</button>
+        <Link to="/parent-journal" className="btn btn-outline-primary">📘 Diario genitoriale</Link>
+        <Link to="/emotional-wellbeing" className="btn btn-outline-success">🧘‍♀️ Area benessere</Link>
+        <Link to="/return-to-work" className="btn btn-outline-info">📍 Parcheggi rosa salvati</Link>
+        <Link to="/communication" className="btn btn-outline-secondary">👨‍👩‍👧 Diario condiviso con partner</Link>
       </div>
 
       {/* Notifiche recenti */}
@@ -110,6 +155,22 @@ function UserDashboard({ user, onLogout }) {
         <li className="list-group-item">30 Aprile – “Mi sento stanca ma serena.”</li>
         <li className="list-group-item">29 Aprile – “Mal di testa e nervosismo.”</li>
       </ul>
+
+      {dashboardData?.sharedDiary?.content && (
+  <>
+    <h4 className="mt-5">📝 Diario condiviso con partner</h4>
+    <div className="card mb-3">
+      <div className="card-body">
+        <p><strong>Nota:</strong> {dashboardData.sharedDiary.content}</p>
+        {dashboardData.sharedDiary.emotion && (
+          <p><strong>Stato emotivo:</strong> {dashboardData.sharedDiary.emotion}</p>
+        )}
+        <p className="text-muted">Ultimo aggiornamento: {new Date(dashboardData.sharedDiary.created_at).toLocaleString()}</p>
+      </div>
+    </div>
+  </>
+)}
+
 
       {/* Stato partner */}
       <h4 className="mt-5">Partner</h4>

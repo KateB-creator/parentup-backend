@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import '../styles/BabyCare.scss';
 import TimelineRoutine from './TimelineRoutine'; 
 import BabyCareGuides from './BabyCareGuides'; 
+import WeaningGuide from './WeaningGuide';
 
 
 function BabySleepCarousel() {
@@ -137,18 +138,14 @@ function BabyCare() {
   return (
     <div className="container my-5">
       <h2 className="text-center mb-4">Cura del Neonato</h2>
-      
-      {/* Carosello per il sonno */}
+
       <BabySleepCarousel />
-
+      <BabyCareGuides />
+      <WeaningGuide />
        {/* Timeline Routine della Nanna */}
-       <TimelineRoutine />
-
+      <TimelineRoutine />
        {/* Checklist cura quotidiana */}
       <BabyCareChecklist />
-
-       {/* Guide interattive (bagnetto, pannolino, ecc.) */}
-      <BabyCareGuides />
 
     </div>
   );

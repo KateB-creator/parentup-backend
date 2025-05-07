@@ -1,0 +1,24 @@
+.weaning-guide h3 {
+  color: #d17b0f;
+}
+.weaning-guide p {
+  font-size: 1.1rem;
+}
+.weaning-guide .card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+.weaning-guide .card:hover {
+  transform: translateY(-5px);
+}
+.weaning-guide .card img {
+  height: 200px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.weaning-guide .card .card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
