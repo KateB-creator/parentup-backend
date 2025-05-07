@@ -6,7 +6,6 @@ header('Access-Control-Allow-Headers: Content-Type');
 
 require_once(__DIR__ . '/../db.php');
 
-// Leggi il body JSON
 $data = json_decode(file_get_contents("php://input"));
 
 if (!isset($data->id)) {
@@ -14,11 +13,11 @@ if (!isset($data->id)) {
   exit;
 }
 
-// 1. Elimina prima i commenti associati
+// Elimina prima i commenti
 $stmt1 = $pdo->prepare("DELETE FROM community_comments WHERE post_id = ?");
 $stmt1->execute([$data->id]);
 
-// 2. Elimina il post
+// Poi elimina il post
 $stmt2 = $pdo->prepare("DELETE FROM community_posts WHERE id = ?");
 $stmt2->execute([$data->id]);
 
