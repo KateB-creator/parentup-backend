@@ -14,10 +14,12 @@ if (!file_exists($uploadDir)) {
 // Variabili iniziali
 $name = $_POST['name'] ?? '';
 $message = $_POST['message'] ?? '';
+$userId = $_POST['user_id'] ?? null;
 $mediaUrl = null;
 
-if (empty($name) || empty($message)) {
-    echo json_encode(['error' => 'Nome e messaggio sono obbligatori.']);
+// Validazione base
+if (empty($name) || empty($message) || !$userId) {
+    echo json_encode(['success' => false, 'error' => 'Nome, messaggio e user_id sono obbligatori.']);
     exit;
 }
 
@@ -25,21 +27,24 @@ if (empty($name) || empty($message)) {
 if (!empty($_FILES['media']) && $_FILES['media']['error'] === UPLOAD_ERR_OK) {
     $fileTmp = $_FILES['media']['tmp_name'];
     $fileName = basename($_FILES['media']['name']);
-    $targetPath = $uploadDir . $fileName;
 
-    // Evita sovrascritture aggiungendo un timestamp
+    // Aggiungi timestamp per evitare conflitti
     $extension = pathinfo($fileName, PATHINFO_EXTENSION);
     $baseName = pathinfo($fileName, PATHINFO_FILENAME);
     $newName = $baseName . '_' . time() . '.' . $extension;
     $targetPath = $uploadDir . $newName;
 
     if (move_uploaded_file($fileTmp, $targetPath)) {
-        $mediaUrl = '/uploads/' . $newName; // path da salvare nel DB
+        $mediaUrl = '/uploads/' . $newName; // path relativo da salvare nel DB
     }
 }
 
 // Salvataggio nel DB
-$stmt = $pdo->prepare("INSERT INTO community_posts (name, message, media_url) VALUES (?, ?, ?)");
-$stmt->execute([$name, $message, $mediaUrl]);
+try {
+    $stmt = $pdo->prepare("INSERT INTO community_posts (user_id, name, message, media_url) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$userId, $name, $message, $mediaUrl]);
 
-echo json_encode(['success' => true, 'message' => 'Post pubblicato con successo.']);
+    echo json_encode(['success' => true, 'message' => 'Post pubblicato con successo.']);
+} catch (PDOException $e) {
+    echo json_encode(['success' => false, 'error' => 'Errore DB: ' . $e->getMessage()]);
+}

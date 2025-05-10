@@ -168,7 +168,7 @@ function CommunitySupport() {
               )}
 
               {/* Azioni sul post */}
-              {currentUser?.id?.toString() === post.user_id?.toString() && (
+              {parseInt(currentUser?.id) === parseInt(post.user_id) && (
                 <div className="text-end mt-2">
                   <button className="btn btn-sm btn-outline-secondary me-2" onClick={() => setEditingPostId(post.id)}>Modifica</button>
                   <button className="btn btn-sm btn-outline-danger" onClick={() => deletePost(post.id)}>Elimina</button>
