@@ -4,6 +4,30 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import '../styles/ReturnToWork.scss';
 
+function getDistanceKm(lat1, lng1, lat2, lng2) {
+  const R = 6371; // Raggio della Terra in km
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) *
+    Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLng / 2) * Math.sin(dLng / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+function RecenterMap({ position }) {
+  const map = useMapEvents({});
+  useEffect(() => {
+    if (position) {
+      map.setView(position, 13);
+      console.log("Mappa centrata su:", position);
+    }
+  }, [position]);
+  return null;
+}
+
 // Fix icone Leaflet
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: new URL('leaflet/dist/images/marker-icon-2x.png', import.meta.url).href,
@@ -61,16 +85,27 @@ function ReturnToWork() {
     popupAnchor: [0, -30],
   });
 
+  const nearbyIcon = new L.Icon({
+    iconUrl: '/icons/pink_car.png', 
+    iconSize: [35, 35],
+    iconAnchor: [17, 35],
+    popupAnchor: [0, -30],
+  });
+
   const handleLocate = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          console.log("Posizione trovata:", position); // 👈 debug
           setUserPosition({
             lat: position.coords.latitude,
             lng: position.coords.longitude
           });
         },
-        () => alert('Impossibile ottenere la tua posizione.')
+        (error) => {
+          console.error("Errore geolocalizzazione:", error); // 👈 debug
+          alert('Impossibile ottenere la tua posizione.');
+        }
       );
     } else {
       alert('Geolocalizzazione non supportata dal browser.');
@@ -83,6 +118,13 @@ function ReturnToWork() {
       .then(data => setParkingSpots(data))
       .catch(err => console.error(err));
   }, []);
+
+  const nearbySpots = userPosition
+  ? parkingSpots.filter(spot => {
+      const dist = getDistanceKm(userPosition.lat, userPosition.lng, spot.lat, spot.lng);
+      return dist <= 1; // entro 1 km
+    })
+  : [];
 
   const handleAddParking = (spot) => {
     fetch('http://localhost/parentup/backend/api/parking/add.php', {
@@ -262,25 +304,40 @@ function ReturnToWork() {
         <button className="btn btn-success mb-3" onClick={handleLocate}>
           📍 Trova la tua posizione
         </button>
+        <p>
+        <span className="me-3">🚗 Parcheggi rosa</span>
+        <span style={{ color: 'blue' }}>🔵 Vicino a te (&lt; 1km)</span>
+      </p>
 
         <div className="map-container" style={{ height: '500px', width: '100%' }}>
-          <MapContainer center={userPosition || [41.9, 12.5]} zoom={13} style={{ height: '100%', width: '100%' }}>
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution="&copy; OpenStreetMap contributors"
-            />
-            {userPosition && (
-              <Marker position={userPosition} icon={carIcon}>
-                <Popup>La tua posizione</Popup>
-              </Marker>
-            )}
-            {parkingSpots.map((spot, i) => (
-              <Marker key={i} position={[spot.lat, spot.lng]} icon={carIcon}>
-                <Popup>Parcheggio rosa</Popup>
-              </Marker>
-            ))}
-            <AddParkingMarker onAdd={handleAddParking} />
-          </MapContainer>
+        <MapContainer center={userPosition || [41.9, 12.5]} zoom={13} style={{ height: '100%', width: '100%' }}>
+  <TileLayer
+    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    attribution="&copy; OpenStreetMap contributors"
+  />
+  <RecenterMap position={userPosition} /> {/* 👈 Fix per centraggio dinamico */}
+  {userPosition && (
+    <Marker position={userPosition} icon={carIcon}>
+      <Popup>La tua posizione</Popup>
+    </Marker>
+  )}
+  {parkingSpots.map((spot, i) => {
+  const isNearby = nearbySpots.some(s => s.lat === spot.lat && s.lng === spot.lng);
+  return (
+    <Marker
+      key={i}
+      position={[spot.lat, spot.lng]}
+      icon={isNearby ? nearbyIcon : carIcon}
+    >
+      <Popup>
+        Parcheggio rosa {isNearby ? '(vicino a te)' : ''}
+      </Popup>
+    </Marker>
+  );
+})}
+  <AddParkingMarker onAdd={handleAddParking} />
+</MapContainer>
+
         </div>
       </div>
     </div>

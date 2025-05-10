@@ -15,6 +15,7 @@ function CommunitySupport() {
     const res = await fetch('http://localhost/parentup/backend/api/community/get_posts.php');
     const data = await res.json();
     setPosts(data);
+    console.log('Posts ricevuti:', data);
   };
 
   useEffect(() => {
@@ -167,14 +168,13 @@ function CommunitySupport() {
               )}
 
               {/* Azioni sul post */}
-              {parseInt(currentUser?.id) === parseInt(post.user_id) && (
+              {currentUser?.id?.toString() === post.user_id?.toString() && (
                 <div className="text-end mt-2">
                   <button className="btn btn-sm btn-outline-secondary me-2" onClick={() => setEditingPostId(post.id)}>Modifica</button>
                   <button className="btn btn-sm btn-outline-danger" onClick={() => deletePost(post.id)}>Elimina</button>
                 </div>
               )}
-
-              {/* Commenti */}
+                            {/* Commenti */}
               <div className="comment-thread mt-4">
                 {post.comments?.map(comment => (
                   <div key={comment.id} className="mb-3">

@@ -1,104 +1,135 @@
-# ParentUp
+# 👨‍👨‍👦 ParentUp
 
-Benvenutə su **ParentUp**! 😊
-
-ParentUp è un'applicazione inclusiva post-parto pensata per supportare attivamente papà, partner, papà adottivi, genitori LGBTQ+ e chiunque voglia essere una presenza significativa nel percorso di crescita di un neonato o bambino.
-
----
-
-## 🎓 Tecnologie utilizzate
-
-- **Frontend**: React + Vite + Bootstrap 5 + SCSS
-- **Backend**: PHP
-- **Database**: MySQL
-- **Server locale**: XAMPP (Apache + MySQL)
+**ParentUp** è un'applicazione web inclusiva, progettata per supportare i papà, i genitori LGBTQ+ e tutte le famiglie nel periodo post-parto e nella gestione quotidiana della genitorialità moderna.  
+Il progetto nasce con l'obiettivo di fornire strumenti pratici, emotivi e organizzativi per accompagnare il rientro al lavoro, la cura dei figli e la condivisione delle responsabilità.
 
 ---
 
-## 🔧 Funzionalità principali
+## 🎯 Obiettivi del progetto
 
-- **HomePage**: dashboard semplice, empatica e personalizzabile
-- **Cura del neonato**: guida all'allattamento, svezzamento, routine base
-- **Comunicazione genitoriale**: diario condiviso, calendario familiare, spazio "Noi due"
-- **Genitorialità LGBTQ+**: percorsi specifici, podcast, mappa dei servizi
-- **Rientro al lavoro**: consigli pratici, supporto emotivo e servizi utili
-- **Benessere emotivo**: meditazioni, esercizi di rilassamento, diario emozionale
-- **Community e supporto**: forum, gruppi tematici, incontri online, contatto diretto con esperti
+- Supportare la **paternità attiva e consapevole**
+- Valorizzare la **diversità delle famiglie**, in particolare quelle LGBTQ+
+- Fornire strumenti concreti, accessibili e utilizzabili su web e mobile
+- Offrire un'interfaccia user-friendly e responsive per tutti i dispositivi
 
 ---
 
-## 🔗 Struttura progetto
+## 📲 In fase di sviluppo
 
-```
-/parentup
-├── frontend/
-│   ├── src/
-│   ├── public/
-│   └── package.json
+- 💻 Mockup completi (desktop & mobile) in Figma
+- 📱 Conversione in app Android/iOS prevista (con Capacitor o React Native)
+- 🔄 Continui aggiornamenti e refactoring in corso
+
+---
+
+## 🧠 Funzionalità attuali
+
+### 🔐 Autenticazione
+- Login/registrazione con token semplificato (`Bearer user-{id}`)
+- Sessione utente e partner
+- Protezione delle route e API tramite JWT
+
+### 🏠 Dashboard
+- Diario condiviso tra i partner
+- Emozioni, pensieri e attività giornaliere salvate nel database
+- Visualizzazione e aggiornamento promemoria
+
+### 📍 Mappa Parcheggi Rosa
+- Geolocalizzazione utente (Leaflet)
+- Evidenziazione parcheggi entro 1km
+- Aggiunta parcheggi personalizzati (salvati via API)
+- Icone personalizzate (`car.png`, `pink.car.png`)
+
+### ✅ Checklist Rientro al Lavoro
+- Task predefiniti + stato completamento
+- Salvataggio automatico (localStorage + backend)
+- Planner settimanale personalizzabile
+
+### 💬 Community Support
+- Area social per post/commenti
+- Diario delle emozioni
+- Sezione LGBTQ+ Parenting
+- Guide babycare, routine giornaliere e benessere emotivo
+
+---
+
+## 🧱 Tecnologie utilizzate
+
+### 🖥️ Frontend (React + Vite)
+- React con routing e protezione pagine
+- Bootstrap + SCSS
+- Leaflet per mappa interattiva
+- LocalStorage + chiamate API con `fetch`
+
+### ⚙️ Backend (PHP + MySQL su XAMPP)
+- REST API modulari (`auth/`, `diary/`, `return_to_work/`, `parking/`)
+- Autenticazione token-based
+- PDO per accesso sicuro al DB
+- Validazione, sicurezza e gestione utenti
+
+---
+
+## 📁 Struttura del progetto
+
+PARENTUP/
 ├── backend/
-│   ├── db.php
-│   └── saveRequest.php
-├── .gitignore
-├── README.md
-```
+│ └── api/
+│ ├── auth/ # Login, registrazione, validazione token
+│ ├── diary/ # Diario condiviso
+│ ├── dashboard/ # Dati utente per dashboard
+│ ├── parking/ # Parcheggi rosa (get/add)
+│ ├── return_to_work/ # Checklist e planner
+│ └── user/, db.php
+├── frontend/
+│ ├── public/
+│ │ └── icons/ # Icone personalizzate (car, pink car)
+│ └── src/
+│ ├── components/
+│ │ ├── auth/ # Login, register, dashboard protetta
+│ │ ├── common/ # Navbar, Footer
+│ │ └── sections/ # BabyCare, LGBTQParenting, ReturnToWork...
+│ ├── styles/ # CSS e SCSS sezioni
+│ └── App.jsx, main.jsx
+├── .env
+├── vite.config.js
+├── LICENSE
+└── README.md
 
----
+## 🧪 Come eseguire l'app
 
-## 🔄 Installazione locale
+### Requisiti:
+- Node.js + npm
+- PHP (via XAMPP)
+- MySQL (via XAMPP)
+- Figma (per mockup UI)
 
-1. **Clona il repository:**
-   ```bash
-   git clone https://github.com/tuo-utente/parentup.git
-   cd parentup
-   ```
+### 1. Frontend (React)
+```bash
+cd frontend
+npm install
+npm run dev
 
-2. **Frontend (React):**
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
+Backend (PHP + MySQL)
+Avvia XAMPP: Apache + MySQL
 
-3. **Backend (PHP + MySQL):**
-   - Posiziona la cartella `parentup/` dentro `C:/xampp/htdocs/` (se usi XAMPP)
-   - Avvia Apache e MySQL da XAMPP
-   - Crea il database `parentup_db` ed esegui lo script di creazione tabella:
-     ```sql
-     CREATE TABLE expert_requests (
-       id INT AUTO_INCREMENT PRIMARY KEY,
-       name VARCHAR(255) NOT NULL,
-       email VARCHAR(255) NOT NULL,
-       expert_type VARCHAR(100) NOT NULL,
-       message TEXT NOT NULL,
-       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-     );
-     ```
+Importa il dump SQL nel database (parentup)
 
-4. **Accesso all'app:**
-   - Frontend: [http://localhost:5173](http://localhost:5173)
-   - Backend: [http://localhost/parentup/backend/](http://localhost/parentup/backend/)
+Accedi a http://localhost:5173
 
----
 
-## 📊 Stato di sviluppo
+🔐 Note sulla sicurezza
+Autenticazione semplificata in locale (user-{id})
 
-- [x] Struttura frontend React completata
-- [x] Gestione SCSS separata per sezioni
-- [x] Form contatto esperto collegato a database
-- [x] Sistema CORS configurato correttamente
-- [ ] Aggiunta funzionalità forum e gruppi tematici (prossimamente)
-- [ ] Ottimizzazione UI/UX mobile
-- [ ] Deploy in produzione
+In produzione si prevede uso di JWT completi con chiavi segrete
 
----
+Validazioni lato server (da rafforzare)
 
-## 👥 Credits
+🏳️‍🌈 Dedicato a...
+Tutti i papà, le mamme, i genitori queer, le famiglie arcobaleno e ogni persona che sceglie l’amore come base per costruire una famiglia.
+ParentUp nasce per voi.
 
-Sviluppato da **Balia Katiuscia** con amore per tutti i genitori e partner. 💜
-
----
-
-## 🚀 Licenza
-
-Progetto open-source per scopo educativo e di supporto sociale.
-
+👤 Autore
+Katiuscia Balia
+📍 Decimomannu, Sardegna 
+🎓 jr Full stack Developer- specializzata nel lato Frontend
+🔗 In fase di pubblicazione online

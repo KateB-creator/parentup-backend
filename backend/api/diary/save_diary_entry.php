@@ -14,10 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
   exit;
 }
 
-// Obbliga la risposta a JSON
 header('Content-Type: application/json');
-
-// Debug PHP
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
@@ -46,11 +43,23 @@ if (!$content || !$partner_id) {
 }
 
 try {
+  // Salva nel diario
   $stmt = $pdo->prepare("
     INSERT INTO shared_diary (user_id, partner_id, content, emotion)
     VALUES (?, ?, ?, ?)
   ");
   $stmt->execute([$user_id, $partner_id, $content, $emotion]);
+
+  // Notifica al partner
+  $notifStmt = $pdo->prepare("
+      INSERT INTO notifications (user_id, title, message, is_read)
+      VALUES (?, ?, ?, 0)
+  ");
+  $notifStmt->execute([
+      $partner_id,
+      'Nuovo messaggio dal partner',
+      $authUser['name'] . ' ha scritto nel diario condiviso.',
+  ]);
 
   echo json_encode(["success" => true]);
 } catch (Exception $e) {

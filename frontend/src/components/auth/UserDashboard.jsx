@@ -63,6 +63,19 @@ function UserDashboard({ user, onLogout }) {
     }
   };
 
+  const [notifications, setNotifications] = useState([]);
+
+useEffect(() => {
+  if (!user) return;
+
+  fetch('http://localhost/parentup/backend/api/dashboard/get_notifications.php', {
+    headers: { Authorization: `Bearer ${user.token}` }
+  })
+    .then(res => res.json())
+    .then(data => setNotifications(data))
+    .catch(err => console.error("Errore notifiche:", err));
+}, [user]);
+
   return (
     <div className="container my-5">
       <h2 className="mb-4">Ciao {user?.name || 'utente'}!</h2>
@@ -141,13 +154,17 @@ function UserDashboard({ user, onLogout }) {
       </div>
 
       {/* Notifiche recenti */}
-      <h4 className="mt-5">Notifiche</h4>
-      <div className="alert alert-primary" role="alert">
-        🔔 Hai un appuntamento pediatrico domani alle 10:00
-      </div>
-      <div className="alert alert-primary" role="alert">
-        🔔 Obiettivo di oggi: 10 minuti di meditazione
-      </div>
+      <h4 className="mt-5">🔔 Notifiche</h4>
+        {notifications.length === 0 ? (
+          <p className="text-muted">Nessuna notifica recente.</p>
+        ) : (
+          notifications.map((n) => (
+            <div key={n.id} className={`alert alert-${n.is_read ? 'secondary' : 'primary'}`} role="alert">
+              <strong>{n.title}</strong> – {n.message}
+              <div className="text-muted small">{new Date(n.created_at).toLocaleString()}</div>
+            </div>
+          ))
+        )}
 
       {/* Ultime voci diario emotivo */}
       <h4 className="mt-5">Ultime voci diario emotivo</h4>

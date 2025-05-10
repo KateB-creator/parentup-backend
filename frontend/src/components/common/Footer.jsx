@@ -17,9 +17,9 @@ function Footer() {
           <div className="col-md-4 mb-3">
             <h6 className="text-white">🌐 Social & Portfolio</h6>
             <ul className="list-unstyled">
-              <li><a href="https://baliakatiuscia.it" target="_blank" rel="noopener noreferrer" className="text_footer"><FaGlobe className="me-2" />Sito Web</a></li>
-              <li><a href="https://www.start2impact.it" target="_blank" rel="noopener noreferrer" className="text_footer"><FaRocketchat className="me-2" />Start2Impact</a></li>
-              <li><a href="https://github.com/balia-katiuscia" target="_blank" rel="noopener noreferrer" className="text_footer"><FaGithub className="me-2" />GitHub</a></li>
+              <li><a href="https://kateb-creator.github.io/il-mio-sito-web/" target="_blank" rel="noopener noreferrer" className="text_footer"><FaGlobe className="me-2" />Sito Web</a></li>
+              <li><a href="https://talent.start2impact.it/profile/katiuscia-balia-71206396-6900-44db-82b9-f0e10f1a3e9a" target="_blank" rel="noopener noreferrer" className="text_footer"><FaRocketchat className="me-2" />Start2Impact</a></li>
+              <li><a href="https://github.com/KateB-creator" target="_blank" rel="noopener noreferrer" className="text_footer"><FaGithub className="me-2" />GitHub</a></li>
             </ul>
           </div>
 

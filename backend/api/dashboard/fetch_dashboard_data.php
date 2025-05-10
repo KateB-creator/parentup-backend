@@ -13,6 +13,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 require_once '../auth/validate_jwt.php';
 
+$user = getAuthenticatedUser();
+$user_id = $user['id']; // ✅ Variabile definita correttamente
+
 $response = [];
 
 // Rientro al lavoro

@@ -31,25 +31,27 @@ function Navbar({ user, onLogout }) {
           <li className="nav-item"><Link className="nav-link" to="/return-to-work">Rientro al lavoro</Link></li>
           <li className="nav-item"><Link className="nav-link" to="/emotional-wellbeing">Benessere</Link></li>
           <li className="nav-item"><Link className="nav-link" to="/community-support">Community</Link></li>
-
           {user ? (
-            <>
-              <li className="nav-item">
-                <Link className="nav-link" to="/dashboard">📊 La mia Dashboard</Link>
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  👤 {user.name}
+                </a>
+                <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                  <li>
+                    <Link className="dropdown-item" to="/dashboard">📊 La mia Dashboard</Link>
+                  </li>
+                  <li><hr className="dropdown-divider" /></li>
+                  <li>
+                    <button className="dropdown-item text-danger" onClick={handleLogout}>Logout</button>
+                  </li>
+                </ul>
               </li>
-              <li className="nav-item">
-                <span className="nav-link text-muted">👤 {user.name}</span>
-              </li>
-              <li className="nav-item">
-                <button className="btn btn-sm btn-outline-danger ms-2" onClick={handleLogout}>Logout</button>
-              </li>
-            </>
-          ) : (
-            <>
-              <li className="nav-item"><Link className="nav-link" to="/login">Login</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/register">Registrati</Link></li>
-            </>
-          )}
+            ) : (
+              <>
+                <li className="nav-item"><Link className="nav-link" to="/login">Login</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/register">Registrati</Link></li>
+              </>
+            )}
         </ul>
       </div>
     </nav>
