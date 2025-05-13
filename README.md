@@ -71,29 +71,30 @@ Il progetto nasce con l'obiettivo di fornire strumenti pratici, emotivi e organi
 
 ## 📁 Struttura del progetto
 
-PARENTUP/
+/parentup
+│
 ├── backend/
-│ └── api/
-│ ├── auth/ # Login, registrazione, validazione token
-│ ├── diary/ # Diario condiviso
-│ ├── dashboard/ # Dati utente per dashboard
-│ ├── parking/ # Parcheggi rosa (get/add)
-│ ├── return_to_work/ # Checklist e planner
-│ └── user/, db.php
+│   ├── api/
+│   │   ├── register.php
+│   │   ├── login.php
+│   │   ├── logout.php
+│   ├── config/
+│   │   └── db.php
+│   └── .htaccess (per abilitare CORS se serve)
+│
 ├── frontend/
-│ ├── public/
-│ │ └── icons/ # Icone personalizzate (car, pink car)
-│ └── src/
-│ ├── components/
-│ │ ├── auth/ # Login, register, dashboard protetta
-│ │ ├── common/ # Navbar, Footer
-│ │ └── sections/ # BabyCare, LGBTQParenting, ReturnToWork...
-│ ├── styles/ # CSS e SCSS sezioni
-│ └── App.jsx, main.jsx
-├── .env
-├── vite.config.js
-├── LICENSE
-└── README.md
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── LoginForm.jsx
+│   │   │   ├── RegisterForm.jsx
+│   │   ├── pages/
+│   │   │   ├── HomePage.jsx
+│   │   │   ├── Dashboard.jsx
+│   │   ├── App.jsx
+│   │   ├── index.js
+│   └── package.json
 
 ## 🧪 Come eseguire l'app
 
