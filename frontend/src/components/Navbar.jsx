@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import '../styles/Navbar.css';
 
@@ -7,12 +7,23 @@ export default function Navbar() {
   const location = useLocation();
   const isLoggedIn = !!localStorage.getItem('userEmail');
 
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Cambia lo stato se scroll > 100px
+      setScrolled(window.scrollY > 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem('userEmail');
     navigate('/login');
   };
 
-  // Scroll a sezione (se già sulla homepage)
   const handleScrollOrNavigate = (id) => {
     if (location.pathname === '/') {
       const element = document.getElementById(id);
@@ -23,7 +34,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg bg-light shadow-sm px-3 fixed-top">
+    <nav className={`navbar navbar-expand-lg fixed-top px-3 shadow-sm ${scrolled ? 'navbar-solid' : 'navbar-transparent'}`}>
       <div className="container-fluid">
         <Link className="navbar-brand fw-bold" to="/">ParentUp</Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse"

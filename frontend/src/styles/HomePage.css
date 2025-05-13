@@ -1,7 +1,17 @@
+.hero-section {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+                    url('/assets/hero.png'); /* cambia il path se necessario */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  padding-top: 80px; /* per evitare che la navbar fissa copra il contenuto */
+}
+
 /* Spaziatura e gerarchia visiva */
 section {
-    padding-top: 4rem;
-    padding-bottom: 4rem;
+    padding-top: 60px;
+    padding-bottom: 60px;
   }
   
   section:nth-child(even) {

@@ -3,6 +3,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import '../styles/HomePage.css';
 import { FaGithub, FaGlobe, FaRocket } from 'react-icons/fa';
+import Navbar from '../components/Navbar';
 
 export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true); // ✅ AGGIUNTA QUI
@@ -20,7 +21,7 @@ export default function HomePage() {
       once: true,
     });
 
-    // Simula caricamento
+   
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1500);
@@ -28,7 +29,7 @@ export default function HomePage() {
     return () => clearTimeout(timer);
   }, []);
 
-  // ✅ Mostra il loader mentre isLoading è true
+  
   if (isLoading) {
     return (
       <div className={`loading-screen ${isLoading ? '' : 'fade-out'}`}>
@@ -42,14 +43,17 @@ export default function HomePage() {
 
   
   return (
-    <div>
+    <div className="home-wrapper">
+      <Navbar />
       {/* Hero iniziale */}
-      <div className="container mt-5 pt-5 text-center" data-aos="fade-down">
+      <div className="hero-section d-flex align-items-center text-white text-center" data-aos="fade-down">
+      <div className="container mt-5 pt-5">
         <h1 className="display-4">Benvenuti su ParentUp</h1>
         <p className="lead">
           L'app pensata per il post-partum e post-adozione per papà e famiglie LGBTQ+
         </p>
       </div>
+    </div>
 
       {/* Sezione Cura del Neonato */}
       <section id="neonato" className="py-5 bg-light" data-aos="fade-up">
@@ -172,13 +176,110 @@ export default function HomePage() {
       {/* Sezione Genitorialità LGBTQ+ */}
       <section id="lgbtq" className="py-5 bg-light" data-aos="fade-left">
         <div className="container">
-          <h2 className="mb-3">Genitorialità LGBTQ+</h2>
-          <p>
+          <h2 className="mb-4">Genitorialità LGBTQ+</h2>
+          <p className="mb-5">
             Uno spazio inclusivo per papà gay, famiglie omogenitoriali e chiunque viva una
             genitorialità diversa ma piena d'amore. Con risorse legali, sociali e di comunità.
           </p>
+
+          {/* Tipologie di Famiglie */}
+          <h4 className="mb-3">👨‍👨‍👧‍👦 Tipologie di Famiglie</h4>
+          <div className="row g-4">
+            <div className="col-md-4">
+              <div className="card h-100">
+                <div className="card-body">
+                  <h5 className="card-title">👩‍❤️‍👩 Adozione e affido</h5>
+                  <p className="card-text">Per coppie omogenitoriali che desiderano diventare genitori.</p>
+                  <a href="https://famigliearcobaleno.org/adozioni" target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary btn-sm">
+                    Scopri di più →
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="card h-100">
+                <div className="card-body">
+                  <h5 className="card-title">👨‍👨‍👧‍👦 Co-genitorialità</h5>
+                  <p className="card-text">Modelli familiari condivisi tra più adulti consapevoli e presenti.</p>
+                  <a href="https://www.retegenitorirainbow.it/cogenitorialita" target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary btn-sm">
+                    Approfondisci →
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="card h-100">
+                <div className="card-body">
+                  <h5 className="card-title">🌈 Famiglie Arcobaleno</h5>
+                  <p className="card-text">Storie vere di coraggio, amore e orgoglio.</p>
+                  <a href="https://famigliearcobaleno.org/storie" target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary btn-sm">
+                    Leggi le storie →
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Diritti e Legislazione */}
+          <h3 className="mt-5">⚖️ Diritti e Legislazione</h3>
+          <div className="card mb-4">
+            <div className="card-body">
+              <p className="card-text">
+                Le leggi variano da paese a paese. Ti invitiamo a informarti sui tuoi diritti riguardo adozione,
+                riconoscimento legale, e tutela dei figli.
+                Per l’Italia:{" "}
+                <a href="https://famigliearcobaleno.org" target="_blank" rel="noopener noreferrer">
+                  famigliearcobaleno.org
+                </a>
+              </p>
+            </div>
+          </div>
+
+          {/* Supporto Emotivo e Risorse */}
+          <h3>💬 Supporto Emotivo</h3>
+          <p>
+            La genitorialità LGBTQ+ può incontrare sfide uniche. Non sei solə.
+            Esistono gruppi, professionisti e comunità pronti ad ascoltarti.
+          </p>
+          <h4 className="mt-3">📚 Risorse Utili</h4>
+          <div className="row g-4">
+            <div className="col-md-4">
+              <div className="card h-100">
+                <div className="card-body">
+                  <h6 className="card-title">🌈 Famiglie Arcobaleno</h6>
+                  <p className="card-text">Sostegno, eventi e comunità per famiglie LGBTQ+.</p>
+                  <a href="https://famigliearcobaleno.org" target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-outline-secondary">
+                    Visita →
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="card h-100">
+                <div className="card-body">
+                  <h6 className="card-title">🌐 Rete Genitori Rainbow</h6>
+                  <p className="card-text">Ascolto, orientamento e supporto ai genitori LGBTQ+.</p>
+                  <a href="https://www.retegenitorirainbow.it/" target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-outline-secondary">
+                    Visita →
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="card h-100">
+                <div className="card-body">
+                  <h6 className="card-title">📖 Tutto Tranquillo</h6>
+                  <p className="card-text">Libri e materiali inclusivi per l'infanzia.</p>
+                  <a href="https://www.tuttotranquillo.it/" target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-outline-secondary">
+                    Visita →
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
+
 
       {/* Sezione Ritorno al Lavoro */}
       <section id="lavoro" className="py-5" data-aos="fade-up">
