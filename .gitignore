@@ -11,6 +11,8 @@ dist/
 .env
 .env.local
 .env.production
+backend/.env
+backend/vendor/
 
 # Sistema operativo
 .DS_Store
