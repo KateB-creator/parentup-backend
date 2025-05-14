@@ -6,6 +6,7 @@ import { FaGithub, FaGlobe, FaRocket } from 'react-icons/fa';
 import Navbar from '../components/Navbar';
 import BenessereSection from '../components/BenessereSection';
 import LGBTQSection from '../components/LGBTQSection';
+import BoardSection from '../components/BoardSection'
 
 export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -62,7 +63,7 @@ export default function HomePage() {
     <div className="home-wrapper">
       <Navbar />
       {/* Hero iniziale */}
-      <div className="hero-section d-flex justify-content-center align-items-center text-white text-center" style={{ minHeight: '100vh' }}>
+      <div className="hero-section d-flex justify-content-center align-items-center text-center">
         <div className="container">
           <div className="hero-content">
             <h1 className="title-hero fw-bold display-4">Benvenutə su ParentUp</h1>
@@ -191,6 +192,7 @@ export default function HomePage() {
             Suggerimenti su come rientrare al lavoro in modo graduale, con mappa dei parcheggi rosa,
             gestione del tempo e consigli su congedi e diritti.
           </p>
+          <BoardSection />
         </div>
       </section>
       

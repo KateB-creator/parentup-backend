@@ -37,10 +37,16 @@ export default function Navbar() {
     <nav className={`navbar navbar-expand-lg fixed-top px-3 shadow-sm ${scrolled ? 'navbar-solid' : 'navbar-transparent'}`}>
       <div className="container-fluid">
         <Link className="navbar-brand fw-bold" to="/">ParentUp</Link>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
-          data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-          aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+          style={{ borderColor: '#fff' }}>
+          <span className="navbar-toggler-icon" style={{ backgroundImage: "url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e\")" }}></span>
         </button>
 
         <div className="collapse navbar-collapse" id="navbarNav">

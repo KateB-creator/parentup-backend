@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { logout, updateUser, deleteUser } from '../api/auth';
+import { logout, updateUser, deleteUser, getNotifications, clearNotifications } from '../api/auth';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -9,8 +9,10 @@ export default function Dashboard() {
   const [cognome] = useState(localStorage.getItem('userCognome') || '');
   const [messaggio, setMessaggio] = useState('');
   const [modificaAttiva, setModificaAttiva] = useState(false);
+  const [modificaPassword, setModificaPassword] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
+  const [notifiche, setNotifiche] = useState([]);
 
-  // Checklist stato
   const [curaBambino, setCuraBambino] = useState(() => {
     return JSON.parse(localStorage.getItem('curaBambino')) || Array(5).fill(false);
   });
@@ -23,7 +25,6 @@ export default function Dashboard() {
     if (!email) navigate('/login');
   }, [email, navigate]);
 
-  // Salva stato checklist su localStorage
   useEffect(() => {
     localStorage.setItem('curaBambino', JSON.stringify(curaBambino));
   }, [curaBambino]);
@@ -31,6 +32,20 @@ export default function Dashboard() {
   useEffect(() => {
     localStorage.setItem('ritornoLavoro', JSON.stringify(ritornoLavoro));
   }, [ritornoLavoro]);
+
+  const caricaNotifiche = () => {
+    getNotifications()
+      .then(res => {
+        if (res.data && Array.isArray(res.data)) {
+          setNotifiche(res.data);
+        }
+      })
+      .catch(err => console.error('Errore notifiche:', err));
+  };
+
+  useEffect(() => {
+    caricaNotifiche();
+  }, []);
 
   const toggleCheckbox = (index, type) => {
     if (type === 'cura') {
@@ -44,6 +59,16 @@ export default function Dashboard() {
     }
   };
 
+  const handleClearNotifications = () => {
+    clearNotifications()
+      .then(res => {
+        if (res.data.success) {
+          setNotifiche([]);
+        }
+      })
+      .catch(err => console.error('Errore durante la cancellazione notifiche:', err));
+  };
+
   const handleLogout = async () => {
     await logout();
     localStorage.clear();
@@ -52,11 +77,19 @@ export default function Dashboard() {
 
   const handleModifica = async () => {
     try {
-      const res = await updateUser(email);
+      const payload = { email };
+      if (newPassword.trim()) {
+        payload.password = newPassword;
+      }
+  
+      console.log("Payload inviato:", payload);
+  
+      const res = await updateUser(payload);
       if (res.data.success) {
         localStorage.setItem('userEmail', email);
-        setMessaggio('Email aggiornata con successo.');
+        setMessaggio('Dati aggiornati con successo.');
         setModificaAttiva(false);
+        setNewPassword('');
       } else {
         setMessaggio(res.data.message || 'Errore durante l’aggiornamento.');
       }
@@ -64,6 +97,7 @@ export default function Dashboard() {
       setMessaggio('Errore di connessione.');
     }
   };
+  
 
   const handleCancella = async () => {
     if (window.confirm("Sei sicuro di voler cancellare il tuo account? L'operazione è irreversibile.")) {
@@ -85,6 +119,27 @@ export default function Dashboard() {
     <div className="container mt-5">
       <h2>Benvenutə {nome} {cognome}</h2>
       <p>Questa è la tua dashboard personale.</p>
+
+      <hr />
+      <h4>🔔 Le tue notifiche</h4>
+
+      {notifiche.length > 0 ? (
+        <div className="alert alert-info">
+          <div className="d-flex justify-content-between align-items-center">
+            <h5 className="mb-0">📩 Notifiche recenti</h5>
+            <button className="btn btn-sm btn-outline-secondary" onClick={handleClearNotifications}>
+              Segna tutte come lette
+            </button>
+          </div>
+          <ul className="mb-0 mt-2">
+            {notifiche.map((n, i) => (
+              <li key={i}>{n.message} <small className="text-muted">({n.created_at})</small></li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <p className="text-muted">Nessuna notifica al momento.</p>
+      )}
 
       {/* Checklist Cura del Bambino */}
       <div className="mt-4">
@@ -139,14 +194,32 @@ export default function Dashboard() {
           onChange={(e) => setEmail(e.target.value)}
         />
       </div>
+
+      {modificaAttiva && (
+        <div className="mb-3">
+          <label>Nuova password</label>
+          <input
+            type="password"
+            className="form-control"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            placeholder="Lascia vuoto per non cambiare"
+          />
+        </div>
+      )}
+
       <div className="d-flex gap-2">
         {modificaAttiva ? (
           <>
             <button className="btn btn-success" onClick={handleModifica}>Salva</button>
-            <button className="btn btn-secondary" onClick={() => setModificaAttiva(false)}>Annulla</button>
+            <button className="btn btn-secondary" onClick={() => {
+              setModificaAttiva(false);
+              setModificaPassword(false);
+              setNewPassword('');
+            }}>Annulla</button>
           </>
         ) : (
-          <button className="btn btn-primary" onClick={() => setModificaAttiva(true)}>Modifica email</button>
+          <button className="btn btn-primary" onClick={() => setModificaAttiva(true)}>Modifica email o password</button>
         )}
         <button className="btn btn-danger ms-auto" onClick={handleCancella}>Elimina account</button>
       </div>

@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 $sql = "SELECT nome, cognome, email, genere, dataNascita FROM users WHERE id = ?";
-$stmt = $conn->prepare($sql);
+$stmt = $conn->prepare("SELECT id, nome, cognome, email FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
