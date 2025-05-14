@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import { login } from '../api/auth';
 import "../styles/AuthStyles.css";
 
 export default function LoginForm() {
@@ -12,10 +12,7 @@ export default function LoginForm() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost/parentup/backend/api/login.php', {
-        email,
-        password,
-      });
+      const response = await login(email, password);
 
       if (response.data.success) {
         localStorage.setItem('userEmail', response.data.email);
@@ -32,9 +29,14 @@ export default function LoginForm() {
 
   return (
     <div className="auth-container">
-      <div className="auth-left bg-lightblue">
+      <div className="auth-left text-center" style={{ backgroundColor: '#fff3cd' }}>
         <div className="p-5">
-          <h2 className="fw-bold">Ciclo e genitorialità sotto controllo</h2>
+          <img 
+            src="../assets/logo.svg" 
+            alt="Logo ParentUp" 
+            style={{ maxWidth: '300px', marginBottom: '20px' }} 
+          />
+          <h2 className="fw-bold">Benvenutə in ParentUp</h2>
           <p className="mt-3">ParentUp ti aiuta nel post-partum e post-adozione con strumenti su misura per ogni tipo di famiglia.</p>
         </div>
       </div>

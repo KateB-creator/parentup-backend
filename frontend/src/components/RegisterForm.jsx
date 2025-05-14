@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import { register } from '../api/auth';
 import '../styles/AuthStyles.css';
 
 export default function RegisterForm() {
@@ -29,18 +29,18 @@ export default function RegisterForm() {
     }
 
     try {
-      const response = await axios.post('http://localhost/parentup/backend/api/register.php', {
-        nome: form.nome,
-        cognome: form.cognome,
-        email: form.email,
-        password: form.password,
-        genere: form.genere,
-        dataNascita: form.dataNascita,
-      });
+      const response = await register(
+        form.email,
+        form.password,
+        form.nome,
+        form.cognome,
+        form.genere,
+        form.dataNascita
+      );
 
       if (response.data.success) {
-        localStorage.setItem('userEmail', form.email);  
-        navigate('/dashboard'); 
+        localStorage.setItem('userEmail', form.email);
+        navigate('/dashboard');
       } else {
         setErrore(response.data.message || 'Errore durante la registrazione.');
       }
@@ -51,9 +51,14 @@ export default function RegisterForm() {
 
   return (
     <div className="auth-container">
-      <div className="auth-left bg-lightpink">
-        <div className="p-5">
-          <h2 className="fw-bold">Unisciti a più di 2 milioni di genitori</h2>
+      <div className="auth-left" style={{ backgroundColor: '#fff3cd' }}>
+        <div className="p-5 text-center">
+          <img 
+            src="../assets/logo.svg" 
+            alt="Logo ParentUp" 
+            style={{ maxWidth: '300px', marginBottom: '20px' }} 
+          />
+          <h2 className="fw-bold">Benvenutə in ParentUp</h2>
           <p className="mt-3">ParentUp è la community inclusiva dedicata alla genitorialità moderna.</p>
         </div>
       </div>
@@ -103,12 +108,12 @@ export default function RegisterForm() {
             <div className="mb-3">
               <label>Genere</label>
               <div className="d-flex gap-2">
-                <button type="button" className={`btn rounded-pill ${form.genere === 'Donna' ? 'btn-primary' : 'btn-outline-secondary'}`}
-                  onClick={() => setForm({ ...form, genere: 'Donna' })}>Donna</button>
-                <button type="button" className={`btn rounded-pill ${form.genere === 'Uomo' ? 'btn-primary' : 'btn-outline-secondary'}`}
-                  onClick={() => setForm({ ...form, genere: 'Uomo' })}>Uomo</button>
-                <button type="button" className={`btn rounded-pill ${form.genere === 'Altro' ? 'btn-primary' : 'btn-outline-secondary'}`}
-                  onClick={() => setForm({ ...form, genere: 'Altro' })}>Altro</button>
+                {['Donna', 'Uomo', 'Altro'].map((gen) => (
+                  <button key={gen} type="button"
+                    className={`btn rounded-pill ${form.genere === gen ? 'btn-primary' : 'btn-outline-secondary'}`}
+                    onClick={() => setForm({ ...form, genere: gen })}
+                  >{gen}</button>
+                ))}
               </div>
             </div>
             <button type="submit" className="btn btn-success w-100 rounded-pill mt-3">Registrati</button>

@@ -4,15 +4,30 @@ import 'aos/dist/aos.css';
 import '../styles/HomePage.css';
 import { FaGithub, FaGlobe, FaRocket } from 'react-icons/fa';
 import Navbar from '../components/Navbar';
+import BenessereSection from '../components/BenessereSection';
+import LGBTQSection from '../components/LGBTQSection';
 
 export default function HomePage() {
-  const [isLoading, setIsLoading] = useState(true); // ✅ AGGIUNTA QUI
+  const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+
+
   const [modalContent, setModalContent] = useState({
     title: '',
     body: '',
     image: ''
   });
+  
+  
+  const handleOpenModal = (title, body, image) => {
+    setModalContent({ title, body, image });
+    setShowModal(true);
+  };
+  
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
 
   useEffect(() => {
     AOS.init({
@@ -25,6 +40,8 @@ export default function HomePage() {
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1500);
+
+  
 
     return () => clearTimeout(timer);
   }, []);
@@ -41,27 +58,27 @@ export default function HomePage() {
     );
   }
 
-  
   return (
     <div className="home-wrapper">
       <Navbar />
       {/* Hero iniziale */}
-      <div className="hero-section d-flex align-items-center text-white text-center" data-aos="fade-down">
-      <div className="container mt-5 pt-5">
-        <h1 className="display-4">Benvenuti su ParentUp</h1>
-        <p className="lead">
-          L'app pensata per il post-partum e post-adozione per papà e famiglie LGBTQ+
-        </p>
+      <div className="hero-section d-flex justify-content-center align-items-center text-white text-center" style={{ minHeight: '100vh' }}>
+        <div className="container">
+          <div className="hero-content">
+            <h1 className="title-hero fw-bold display-4">Benvenutə su ParentUp</h1>
+            <p className="subtitle-hero lead">L'app pensata per il post-partum e post-adozione per papà e famiglie LGBTQ+</p>
+            <a href="#neonato" className="btn btn-outline-light mt-3">Scopri le sezioni ↓</a>
+          </div>
+        </div>
       </div>
-    </div>
 
       {/* Sezione Cura del Neonato */}
       <section id="neonato" className="py-5 bg-light" data-aos="fade-up">
         <div className="container">
           <div className="text-center mb-5">
-            <h2>Perché scegliere ParentUp</h2>
+            <h2>Cura del Bambino</h2>
             <p className="text-muted">
-              Strumenti e risorse affidabili per affrontare al meglio i primi mesi con il tuo bambino.
+            Dal pannolino al bagnetto: tutto ciò che devi sapere per prenderti cura del tuo neonato.
             </p>
           </div>
 
@@ -162,123 +179,8 @@ export default function HomePage() {
         </>
       )}
 
-      {/* Sezione Benessere */}
-      <section id="benessere" className="py-5" data-aos="fade-right">
-        <div className="container">
-          <h2 className="mb-3">Benessere</h2>
-          <p>
-            Meditazioni guidate, esercizi dolci per il corpo e podcast per il supporto emotivo.
-            Un angolo per prenderti cura di te mentre cresci tuo figlio.
-          </p>
-        </div>
-      </section>
-
-      {/* Sezione Genitorialità LGBTQ+ */}
-      <section id="lgbtq" className="py-5 bg-light" data-aos="fade-left">
-        <div className="container">
-          <h2 className="mb-4">Genitorialità LGBTQ+</h2>
-          <p className="mb-5">
-            Uno spazio inclusivo per papà gay, famiglie omogenitoriali e chiunque viva una
-            genitorialità diversa ma piena d'amore. Con risorse legali, sociali e di comunità.
-          </p>
-
-          {/* Tipologie di Famiglie */}
-          <h4 className="mb-3">👨‍👨‍👧‍👦 Tipologie di Famiglie</h4>
-          <div className="row g-4">
-            <div className="col-md-4">
-              <div className="card h-100">
-                <div className="card-body">
-                  <h5 className="card-title">👩‍❤️‍👩 Adozione e affido</h5>
-                  <p className="card-text">Per coppie omogenitoriali che desiderano diventare genitori.</p>
-                  <a href="https://famigliearcobaleno.org/adozioni" target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary btn-sm">
-                    Scopri di più →
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card h-100">
-                <div className="card-body">
-                  <h5 className="card-title">👨‍👨‍👧‍👦 Co-genitorialità</h5>
-                  <p className="card-text">Modelli familiari condivisi tra più adulti consapevoli e presenti.</p>
-                  <a href="https://www.retegenitorirainbow.it/cogenitorialita" target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary btn-sm">
-                    Approfondisci →
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card h-100">
-                <div className="card-body">
-                  <h5 className="card-title">🌈 Famiglie Arcobaleno</h5>
-                  <p className="card-text">Storie vere di coraggio, amore e orgoglio.</p>
-                  <a href="https://famigliearcobaleno.org/storie" target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary btn-sm">
-                    Leggi le storie →
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Diritti e Legislazione */}
-          <h3 className="mt-5">⚖️ Diritti e Legislazione</h3>
-          <div className="card mb-4">
-            <div className="card-body">
-              <p className="card-text">
-                Le leggi variano da paese a paese. Ti invitiamo a informarti sui tuoi diritti riguardo adozione,
-                riconoscimento legale, e tutela dei figli.
-                Per l’Italia:{" "}
-                <a href="https://famigliearcobaleno.org" target="_blank" rel="noopener noreferrer">
-                  famigliearcobaleno.org
-                </a>
-              </p>
-            </div>
-          </div>
-
-          {/* Supporto Emotivo e Risorse */}
-          <h3>💬 Supporto Emotivo</h3>
-          <p>
-            La genitorialità LGBTQ+ può incontrare sfide uniche. Non sei solə.
-            Esistono gruppi, professionisti e comunità pronti ad ascoltarti.
-          </p>
-          <h4 className="mt-3">📚 Risorse Utili</h4>
-          <div className="row g-4">
-            <div className="col-md-4">
-              <div className="card h-100">
-                <div className="card-body">
-                  <h6 className="card-title">🌈 Famiglie Arcobaleno</h6>
-                  <p className="card-text">Sostegno, eventi e comunità per famiglie LGBTQ+.</p>
-                  <a href="https://famigliearcobaleno.org" target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-outline-secondary">
-                    Visita →
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card h-100">
-                <div className="card-body">
-                  <h6 className="card-title">🌐 Rete Genitori Rainbow</h6>
-                  <p className="card-text">Ascolto, orientamento e supporto ai genitori LGBTQ+.</p>
-                  <a href="https://www.retegenitorirainbow.it/" target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-outline-secondary">
-                    Visita →
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card h-100">
-                <div className="card-body">
-                  <h6 className="card-title">📖 Tutto Tranquillo</h6>
-                  <p className="card-text">Libri e materiali inclusivi per l'infanzia.</p>
-                  <a href="https://www.tuttotranquillo.it/" target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-outline-secondary">
-                    Visita →
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <BenessereSection />
+      <LGBTQSection />
 
 
       {/* Sezione Ritorno al Lavoro */}
@@ -294,26 +196,32 @@ export default function HomePage() {
       
       <footer className="bg-dark text-white py-4 mt-5">
         <div className="container text-center">
-          <p className="mb-3 fw-bold">&copy; {new Date().getFullYear()} ParentUp</p>
-
-          <div className="d-flex justify-content-center gap-4 mb-3">
-            <a href="https://github.com/tuo-username" target="_blank" rel="noopener noreferrer" className="text-white fs-4">
-              <FaGithub />
-            </a>
-            <a href="https://tuosito.it" target="_blank" rel="noopener noreferrer" className="text-white fs-4">
-              <FaGlobe />
-            </a>
-            <a href="https://www.start2impact.it" target="_blank" rel="noopener noreferrer" className="text-white fs-4">
-              <FaRocket />
-            </a>
+          {/* Riga con testo + icone */}
+          <div className="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3 mb-3">
+            <p className="mb-0 fw-bold">
+              &copy; {new Date().getFullYear()} ParentUp - Tutti i diritti riservati - progetto sviluppato da Balia Katiuscia
+            </p>
+            <div className="d-flex gap-3">
+              <a href="https://github.com/KateB-creator" target="_blank" rel="noopener noreferrer" className="text-white fs-5">
+                <FaGithub />
+              </a>
+              <a href="https://kateb-creator.github.io/il-mio-sito-web/" target="_blank" rel="noopener noreferrer" className="text-white fs-5">
+                <FaGlobe />
+              </a>
+              <a href="https://www.start2impact.it" target="_blank" rel="noopener noreferrer" className="text-white fs-5">
+                <FaRocket />
+              </a>
+            </div>
           </div>
 
-          <p className="small mb-0">
+          {/* Riga con link privacy e contatti */}
+          <p className="text-center small mb-0">
             <a href="/privacy" className="text-white text-decoration-underline">Privacy</a> ·
             <a href="/contatti" className="text-white text-decoration-underline ms-2">Contattami</a>
           </p>
         </div>
       </footer>
+
     </div>
   );
 }
