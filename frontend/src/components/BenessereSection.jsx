@@ -15,34 +15,34 @@ const BenessereSection = () => {
 
   const cards = [
     {
-      title: 'Meditazione Guidata',
-      image: '/images/meditazione.jpg',
-      text: 'Rilassa la mente con audio guidati.',
-      link: 'https://example.com/meditazione'
+      title: "Meditazione Guidata",
+      image: "../assets/meditazione_guidata.webp",
+      text: "Rilassa la mente con audio guidati.",
+      link: "https://www.insighttimer.com/it" // app gratuita per meditazioni in italiano
     },
     {
-      title: 'Esercizi Dolci',
-      image: '/images/esercizi.jpg',
-      text: 'Movimenti per il corpo post-parto.',
-      link: 'https://example.com/esercizi'
+      title: "Esercizi Dolci",
+      image: "../assets/esercizi_postparto.webp",
+      text: "Movimenti per il corpo post-parto.",
+      link: "https://www.mammole.it/riabilitazione-post-partum/" // articoli e video post-parto
     },
     {
-      title: 'Podcast Motivazionali',
-      image: '/images/podcast.jpg',
-      text: 'Parole e voci per il tuo benessere.',
-      link: 'https://example.com/podcast'
+      title: "Podcast Motivazionali",
+      image: "../assets/podcast.webp",
+      text: "Parole e voci per il tuo benessere.",
+      link: "https://open.spotify.com/show/0xyGx6S1bDHUBB3E7fvj8q" // podcast su maternità (es. Mammadimerda o simili)
     },
     {
-      title: 'Libri Consigliati',
-      image: '/images/libri.jpg',
-      text: 'Letture selezionate per i neogenitori.',
-      link: 'https://example.com/libri'
+      title: "Libri Consigliati",
+      image: "../assets/libri.webp",
+      text: "Letture selezionate per i neogenitori.",
+      link: "https://www.ibs.it/libri/maternita-e-infanzia/maternita-c53" // catalogo libri su IBS
     },
     {
-      title: 'Parla con un Esperto',
-      image: '/images/esperto.jpg',
-      text: 'Psicologi, ostetriche e counselor a portata di click.',
-      link: 'https://example.com/esperti'
+      title: "Parla con un Esperto",
+      image: "../assets/psicologo.webp",
+      text: "Psicologi, ostetriche e counselor a portata di click.",
+      link: "https://www.mammamiahelp.it/" // piattaforma di supporto per neogenitori
     }
   ];
 

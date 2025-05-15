@@ -77,14 +77,14 @@ export default function Dashboard() {
 
   const handleModifica = async () => {
     try {
+      const id = localStorage.getItem('userId'); // ✅ prendi ID corretto
+  
       const payload = { email };
       if (newPassword.trim()) {
         payload.password = newPassword;
       }
   
-      console.log("Payload inviato:", payload);
-  
-      const res = await updateUser(payload);
+      const res = await updateUser(id, payload); // ✅ passalo qui
       if (res.data.success) {
         localStorage.setItem('userEmail', email);
         setMessaggio('Dati aggiornati con successo.');
@@ -97,6 +97,7 @@ export default function Dashboard() {
       setMessaggio('Errore di connessione.');
     }
   };
+  
   
 
   const handleCancella = async () => {

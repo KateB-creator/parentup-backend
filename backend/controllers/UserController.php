@@ -148,5 +148,29 @@ class UserController {
             echo json_encode(['message' => 'Errore nella creazione utente']);
         }
     }
+
+    public function update($id) {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] != $id) {
+            http_response_code(403);
+            echo json_encode(["success" => false, "message" => "Non autorizzato"]);
+            return;
+        }
     
+        $data = json_decode(file_get_contents("php://input"), true);
+        $email = $data['email'] ?? null;
+        $password = isset($data['password']) && $data['password'] !== ''
+            ? password_hash($data['password'], PASSWORD_BCRYPT)
+            : null;
+    
+        $userModel = new User($this->conn);
+        if ($userModel->update($id, $email, $password)) {
+            echo json_encode(["success" => true, "message" => "Utente aggiornato"]);
+        } else {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Errore durante l'aggiornamento"]);
+        }
+    }
+    
+
 }

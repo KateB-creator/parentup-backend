@@ -72,7 +72,7 @@ const LGBTQSection = () => {
                   Esistono gruppi, professionisti e comunità pronti ad ascoltarti.
                 </p>
               </div>
-              <img src="/images/dino.png" alt="Supporto emotivo" className="img-fluid" style={{ maxWidth: '150px' }} />
+              <img src="../assets/lgbtq.svg" alt="Supporto emotivo" className="img-fluid" style={{ maxWidth: '150px' }} />
             </div>
           </div>
 

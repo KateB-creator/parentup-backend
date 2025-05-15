@@ -6,6 +6,8 @@ import RegisterForm from './components/RegisterForm';
 import HomePage from './pages/HomePage';
 import Dashboard from './pages/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
+import PrivacyPage from "./pages/PrivacyPage";
+
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+
         <Route
           path="/dashboard"
           element={
