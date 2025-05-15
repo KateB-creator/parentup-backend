@@ -2,14 +2,21 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-const API_BASE = "http://localhost/parentup/backend/index.php/api"; // punta al router centralizzato
+const API_BASE = "http://localhost/parentup/backend/index.php/api";
 
 // --- USER AUTH ---
 export const login = (email, password) =>
   axios.post(`${API_BASE}/login`, { email, password });
 
-export const register = (email, password) =>
-  axios.post(`${API_BASE}/register`, { email, password });
+export const register = (email, password, nome, cognome, genere, dataNascita) =>
+  axios.post(`${API_BASE}/register`, {
+    email,
+    password,
+    nome,
+    cognome,
+    genere,
+    dataNascita,
+  });
 
 export const logout = () =>
   axios.post(`${API_BASE}/logout`);
@@ -41,8 +48,8 @@ export const deletePost = (id) =>
   axios.delete(`${API_BASE}/posts/${id}`);
 
 // --- COMMENTS ---
-export const createComment = (post_id, content) =>
-  axios.post(`${API_BASE}/comments`, { post_id, content });
+export const createComment = (post_id, content, user_id) =>
+  axios.post(`${API_BASE}/comments`, { post_id, content, user_id });
 
 export const getComments = (post_id) =>
   axios.get(`${API_BASE}/comments?post_id=${post_id}`);
@@ -59,6 +66,7 @@ export const getNotifications = () =>
 
 export const createNotification = (user_id, message) =>
   axios.post(`${API_BASE}/notifications`, { user_id, message });
+
 
 export const clearNotifications = () =>
   axios.put(`${API_BASE}/notifications`);

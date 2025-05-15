@@ -39,6 +39,13 @@ export default function RegisterForm() {
       );
 
       if (response.data.success) {
+        const userId = response.data.user_id;
+      
+        if (userId) {
+          // fai qualcosa solo se user_id è valido
+          localStorage.setItem('userId', userId);
+        }
+      
         localStorage.setItem('userEmail', form.email);
         navigate('/dashboard');
       } else {

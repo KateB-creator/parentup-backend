@@ -15,6 +15,7 @@ export default function LoginForm() {
       const response = await login(email, password);
 
       if (response.data.success) {
+        localStorage.setItem("userId", response.data.user_id);
         localStorage.setItem('userEmail', response.data.email);
         localStorage.setItem('userNome', response.data.nome);
         localStorage.setItem('userCognome', response.data.cognome);

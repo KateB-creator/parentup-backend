@@ -20,8 +20,6 @@ $notificationController = new NotificationController($db);
 $commentController = new CommentController($db);
 
 
-
-
 // --- ID estratti dalle route ---
 $id = null;
 if (preg_match('/\/api\/(users|posts|comments|notifications)\/(\d+)/', $uri, $matches)) {
@@ -31,9 +29,8 @@ if (preg_match('/\/api\/(users|posts|comments|notifications)\/(\d+)/', $uri, $ma
 switch (true) {
     // --- USERS ---
     
-    case $method === 'GET' && preg_match('/\/index\.php\/api\/users\/\d+$/', $uri):
-        $userController->getById($id);
-        break;
+    case $method === 'GET' && preg_match('/\/index\.php\/api\/users$/', $uri):
+        $userController->getAll(); 
 
     case $method === 'POST' && preg_match('/\/index\.php\/api\/users$/', $uri):
         $userController->create();

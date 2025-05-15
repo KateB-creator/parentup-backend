@@ -10,19 +10,23 @@ class NotificationController {
 
     // Recupera tutte le notifiche per un determinato utente
     public function getAll() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) session_start();
+    
+        // DEBUG TEMPORANEO
+        error_log("SESSION USER_ID: " . ($_SESSION['user_id'] ?? 'nessuna'));
+    
         if (!isset($_SESSION['user_id'])) {
             http_response_code(401);
-            echo json_encode(["message" => "Accesso non autorizzato"]);
+            echo json_encode(["success" => false, "message" => "Non autorizzato"]);
             return;
         }
-
-        $user_id = $_SESSION['user_id'];
+    
         $model = new Notification($this->conn);
-        $notifications = $model->getAllByUserId($user_id);
-
+        $notifications = $model->getAllByUserId($_SESSION['user_id']);
+    
         echo json_encode($notifications);
     }
+    
 
     // Crea una nuova notifica per un utente
     public function create() {
@@ -40,27 +44,30 @@ class NotificationController {
 
         if ($model->create()) {
             http_response_code(201);
-            echo json_encode(["message" => "Notifica creata con successo"]);
+            echo json_encode(["success" => true, "message" => "Notifica creata con successo"]);
         } else {
             http_response_code(500);
-            echo json_encode(["message" => "Errore durante la creazione della notifica"]);
+            echo json_encode(["success" => false, "message" => "Errore durante la creazione della notifica"]);
         }
     }
 
     public function markAllAsRead() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+    
         if (!isset($_SESSION['user_id'])) {
             http_response_code(401);
-            echo json_encode(["message" => "Accesso non autorizzato"]);
+            echo json_encode(["success" => false, "message" => "Accesso non autorizzato"]);
             return;
         }
     
         $model = new Notification($this->conn);
         if ($model->markAllAsRead($_SESSION['user_id'])) {
-            echo json_encode(["message" => "Notifiche segnate come lette"]);
+            echo json_encode(["success" => true, "message" => "Notifiche segnate come lette"]);
         } else {
             http_response_code(500);
-            echo json_encode(["message" => "Errore nel segnare le notifiche"]);
+            echo json_encode(["success" => false, "message" => "Errore nel segnare le notifiche"]);
         }
     }
 }

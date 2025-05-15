@@ -28,18 +28,15 @@ export default function BoardSection() {
 
   useEffect(() => {
     fetchPosts();
-    getUser()
-      .then(res => {
-        if (res.data && res.data.user && res.data.user.id) {
-          setLoggedUserId(res.data.user.id);
-          console.log("Utente loggato ID:", res.data.user.id);
-        } else {
-          console.warn("getUser() non ha restituito un utente valido:", res.data);
-        }
-      })
-      .catch(err => console.error('Errore getUser:', err));
+  
+    const storedId = localStorage.getItem('userId');
+    if (storedId) {
+      setLoggedUserId(parseInt(storedId));
+    } else {
+      console.warn("Nessun userId trovato in localStorage");
+    }
   }, []);
-
+  
   const handlePostSubmit = () => {
     if (newPost.title && newPost.content) {
       createPost(newPost.title, newPost.content, loggedUserId)

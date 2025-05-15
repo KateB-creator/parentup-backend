@@ -23,32 +23,25 @@ class CommentController {
     }
 
     public function create() {
-        session_start();
-        if (!isset($_SESSION['user_id'])) {
-            http_response_code(401);
-            echo json_encode(["message" => "Utente non autorizzato"]);
-            return;
-        }
-
         $data = json_decode(file_get_contents("php://input"), true);
-
-        if (!isset($data['post_id']) || !isset($data['content'])) {
+    
+        if (!isset($data['post_id'], $data['content'], $data['user_id'])) {
             http_response_code(400);
-            echo json_encode(["message" => "post_id e content sono obbligatori"]);
+            echo json_encode(["message" => "post_id, content e user_id sono obbligatori"]);
             return;
         }
-
+    
         $model = new Comment($this->conn);
-        $model->user_id = $_SESSION['user_id'];
+        $model->user_id = $data['user_id'];
         $model->post_id = $data['post_id'];
         $model->content = $data['content'];
-
+    
         if ($model->create()) {
             http_response_code(201);
-            echo json_encode(["message" => "Commento creato"]);
+            echo json_encode(["success" => true, "message" => "Commento creato"]);
         } else {
             http_response_code(500);
-            echo json_encode(["message" => "Errore nella creazione del commento"]);
+            echo json_encode(["success" => false, "message" => "Errore nella creazione del commento"]);
         }
     }
 

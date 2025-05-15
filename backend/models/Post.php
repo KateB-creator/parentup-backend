@@ -12,13 +12,30 @@ class Post {
     }
 
     public function getAll() {
-        $query = "SELECT p.*, u.email AS author FROM $this->table p JOIN users u ON p.user_id = u.id ORDER BY p.created_at DESC";
+        $query = "SELECT * FROM posts ORDER BY created_at DESC";
         $result = $this->conn->query($query);
-
+    
         $posts = [];
+    
         while ($row = $result->fetch_assoc()) {
+            $post_id = $row['id'];
+    
+            // Prendi i commenti associati
+            $commentsQuery = "SELECT * FROM comments WHERE post_id = ? ORDER BY created_at ASC";
+            $stmt = $this->conn->prepare($commentsQuery);
+            $stmt->bind_param("i", $post_id);
+            $stmt->execute();
+            $commentsResult = $stmt->get_result();
+    
+            $comments = [];
+            while ($comment = $commentsResult->fetch_assoc()) {
+                $comments[] = $comment;
+            }
+    
+            $row['comments'] = $comments;
             $posts[] = $row;
         }
+    
         return $posts;
     }
 

@@ -101,6 +101,10 @@ parentup/
 │   │   │   ├── Navbar.jsx
 │   │   │   ├── LoginForm.jsx
 │   │   │   ├── RegisterForm.jsx
+            ├── BenessereSection.jsx
+│   │   │   ├── LGBTQSection.jsx
+│   │   │   ├── PrivateRoutes.jsx
+            ├── BoardSection.jsx
 │   │   ├── pages/
 │   │   │   ├── HomePage.jsx
 │   │   │   ├── Dashboard.jsx
