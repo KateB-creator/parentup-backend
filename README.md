@@ -71,20 +71,32 @@ Il progetto nasce con l'obiettivo di fornire strumenti pratici, emotivi e organi
 
 ## 📁 Struttura del progetto
 
-/parentup
-│
+parentup/
 ├── backend/
-│   ├── api/
-│   │   ├── register.php
-│   │   ├── login.php
-│   │   ├── logout.php
+│   ├── controllers/
+│   │   ├── NotificationController.php
+│   │   ├── CommentController.php
+│   │   ├── PostController.php
+│   │   └── UserController.php
+│   ├── models/
+│   │   ├── User.php
+│   │   ├── Comment.php
+│   │   ├── Post.php
+│   │   └── Notification.php
 │   ├── config/
 │   │   └── db.php
-│   └── .htaccess (per abilitare CORS se serve)
+│   ├── routes/
+│   │   └── api.php
+│   ├── index.php
+│   └── migration.sql
 │
 ├── frontend/
 │   ├── public/
+│         ├── assets/
+│         ├── icons/
 │   ├── src/
+        ├── api/
+            ├── auth.js
 │   │   ├── components/
 │   │   │   ├── Navbar.jsx
 │   │   │   ├── LoginForm.jsx

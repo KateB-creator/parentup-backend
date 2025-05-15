@@ -196,7 +196,7 @@ export default function HomePage() {
         </div>
       </section>
       
-      <footer className="bg-dark text-white py-4 mt-5">
+      <footer className="bg-dark text-white py-4">
         <div className="container text-center">
           {/* Riga con testo + icone */}
           <div className="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3 mb-3">
@@ -219,11 +219,10 @@ export default function HomePage() {
           {/* Riga con link privacy e contatti */}
           <p className="text-center small mb-0">
             <a href="/privacy" className="text-white text-decoration-underline">Privacy</a> ·
-            <a href="/contatti" className="text-white text-decoration-underline ms-2">Contattami</a>
+            <a href="https://kateb-creator.github.io/il-mio-sito-web/#contact" className="text-white text-decoration-underline ms-2">Contattami</a>
           </p>
         </div>
       </footer>
-
     </div>
   );
 }

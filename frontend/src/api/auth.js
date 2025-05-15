@@ -2,46 +2,63 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-const API_BASE = "http://localhost/parentup/backend/";
+const API_BASE = "http://localhost/parentup/backend/index.php/api"; // punta al router centralizzato
 
+// --- USER AUTH ---
 export const login = (email, password) =>
-  axios.post(`${API_BASE}api/login.php`, { email, password });
+  axios.post(`${API_BASE}/login`, { email, password });
 
-export const register = (email, password, nome, cognome, genere, dataNascita) =>
-  axios.post(`${API_BASE}api/register.php`, { email, password, nome, cognome, genere, dataNascita });
+export const register = (email, password) =>
+  axios.post(`${API_BASE}/register`, { email, password });
 
-export const logout = () => axios.post(`${API_BASE}api/logout.php`);
+export const logout = () =>
+  axios.post(`${API_BASE}/logout`);
 
-export const getUser = () => axios.get(`${API_BASE}crud/get_user.php`);
+// --- USER INFO ---
+export const getUser = (id) =>
+  axios.get(`${API_BASE}/users/${id}`);
 
-export const updateUser = ({ email, password }) =>
-  axios.put(`${API_BASE}crud/update_user.php`, { email, password });
+export const updateUser = (id, { email, password }) =>
+  axios.put(`${API_BASE}/users/${id}`, { email, password });
 
-export const deleteUser = () => axios.delete(`${API_BASE}crud/delete_user.php`);
+export const deleteUser = (id) =>
+  axios.delete(`${API_BASE}/users/${id}`);
 
-export const createPost = (title, content, user_id = 1) =>
-  axios.post(`${API_BASE}crud/create_post.php`, { title, content, user_id });
+// --- POSTS ---
+export const createPost = (title, content) =>
+  axios.post(`${API_BASE}/posts`, { title, content });
 
 export const getPosts = () =>
-  axios.get(`${API_BASE}crud/get_posts.php`);
+  axios.get(`${API_BASE}/posts`);
 
-export const createComment = (post_id, content, user_id = 1) =>
-  axios.post(`${API_BASE}crud/create_comment.php`, { post_id, content, user_id });
+export const getPost = (id) =>
+  axios.get(`${API_BASE}/posts/${id}`);
 
-export const deletePost = (post_id, user_id) =>
-  axios.post(`${API_BASE}crud/delete_post.php`, { post_id, user_id });
+export const updatePost = (id, title, content) =>
+  axios.put(`${API_BASE}/posts/${id}`, { title, content });
 
-export const deleteComment = (comment_id, user_id) =>
-  axios.post(`${API_BASE}crud/delete_comment.php`, { comment_id, user_id });
+export const deletePost = (id) =>
+  axios.delete(`${API_BASE}/posts/${id}`);
 
-export const updatePost = (post_id, title, content, user_id) =>
-  axios.post(`${API_BASE}crud/update_post.php`, { post_id, title, content, user_id });
+// --- COMMENTS ---
+export const createComment = (post_id, content) =>
+  axios.post(`${API_BASE}/comments`, { post_id, content });
 
-export const updateComment = (comment_id, content, user_id) =>
-  axios.post(`${API_BASE}crud/update_comment.php`, { comment_id, content, user_id });
+export const getComments = (post_id) =>
+  axios.get(`${API_BASE}/comments?post_id=${post_id}`);
 
+export const updateComment = (id, content) =>
+  axios.put(`${API_BASE}/comments/${id}`, { content });
+
+export const deleteComment = (id) =>
+  axios.delete(`${API_BASE}/comments/${id}`);
+
+// --- NOTIFICATIONS ---
 export const getNotifications = () =>
-  axios.get(`${API_BASE}crud/get_notifications.php`, { withCredentials: true });
+  axios.get(`${API_BASE}/notifications`);
+
+export const createNotification = (user_id, message) =>
+  axios.post(`${API_BASE}/notifications`, { user_id, message });
 
 export const clearNotifications = () =>
-  axios.post(`${API_BASE}crud/clear_notifications.php`, {}, { withCredentials: true });
+  axios.put(`${API_BASE}/notifications`);

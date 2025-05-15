@@ -1,18 +1,28 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php'; // Carica composer
+require_once __DIR__ . '/../vendor/autoload.php'; // Carica Composer
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
-//  variabili di ambiente
-$host = $_ENV['DB_HOST'];
-$user = $_ENV['DB_USER'];
-$password = $_ENV['DB_PASS'];
-$dbname = $_ENV['DB_NAME'];
+class Database {
+    private $host;
+    private $user;
+    private $password;
+    private $dbname;
+    public $conn;
 
-// Connessione al DB
-$conn = new mysqli($host, $user, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connessione fallita: " . $conn->connect_error);
+    public function __construct() {
+        $this->host = $_ENV['DB_HOST'];
+        $this->user = $_ENV['DB_USER'];
+        $this->password = $_ENV['DB_PASS'];
+        $this->dbname = $_ENV['DB_NAME'];
+    }
+
+    public function connect() {
+        $this->conn = new mysqli($this->host, $this->user, $this->password, $this->dbname);
+        if ($this->conn->connect_error) {
+            die("Connessione fallita: " . $this->conn->connect_error);
+        }
+        return $this->conn;
+    }
 }
-?>
