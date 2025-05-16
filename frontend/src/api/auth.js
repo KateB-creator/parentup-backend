@@ -2,7 +2,7 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-const API_BASE = "http://localhost/parentup/backend/index.php/api";
+const API_BASE = "http://parentup.fwh.is//index.php/api";
 
 // --- USER AUTH ---
 export const login = (email, password) =>

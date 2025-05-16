@@ -1,8 +1,4 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php'; // Carica Composer
-
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
-$dotenv->load();
 
 class Database {
     private $host;

@@ -25,31 +25,15 @@ Il progetto nasce con l'obiettivo di fornire strumenti pratici, emotivi e organi
 ## 🧠 Funzionalità attuali
 
 ### 🔐 Autenticazione
-- Login/registrazione con token semplificato (`Bearer user-{id}`)
-- Sessione utente e partner
-- Protezione delle route e API tramite JWT
 
 ### 🏠 Dashboard
-- Diario condiviso tra i partner
-- Emozioni, pensieri e attività giornaliere salvate nel database
-- Visualizzazione e aggiornamento promemoria
 
-### 📍 Mappa Parcheggi Rosa
-- Geolocalizzazione utente (Leaflet)
-- Evidenziazione parcheggi entro 1km
-- Aggiunta parcheggi personalizzati (salvati via API)
-- Icone personalizzate (`car.png`, `pink.car.png`)
 
 ### ✅ Checklist Rientro al Lavoro
-- Task predefiniti + stato completamento
-- Salvataggio automatico (localStorage + backend)
-- Planner settimanale personalizzabile
+
 
 ### 💬 Community Support
-- Area social per post/commenti
-- Diario delle emozioni
-- Sezione LGBTQ+ Parenting
-- Guide babycare, routine giornaliere e benessere emotivo
+
 
 ---
 
@@ -58,12 +42,11 @@ Il progetto nasce con l'obiettivo di fornire strumenti pratici, emotivi e organi
 ### 🖥️ Frontend (React + Vite)
 - React con routing e protezione pagine
 - Bootstrap + SCSS
-- Leaflet per mappa interattiva
 - LocalStorage + chiamate API con `fetch`
 
 ### ⚙️ Backend (PHP + MySQL su XAMPP)
-- REST API modulari (`auth/`, `diary/`, `return_to_work/`, `parking/`)
-- Autenticazione token-based
+- REST API modulari 
+- Autenticazione 
 - PDO per accesso sicuro al DB
 - Validazione, sicurezza e gestione utenti
 
@@ -92,25 +75,29 @@ parentup/
 │
 ├── frontend/
 │   ├── public/
-│         ├── assets/
-│         ├── icons/
+│   │   ├── assets/
+│   │   └── icons/
 │   ├── src/
-        ├── api/
-            ├── auth.js
+│   │   ├── api/
+│   │   │   └── auth.js
 │   │   ├── components/
 │   │   │   ├── Navbar.jsx
 │   │   │   ├── LoginForm.jsx
 │   │   │   ├── RegisterForm.jsx
-            ├── BenessereSection.jsx
+│   │   │   ├── BenessereSection.jsx
 │   │   │   ├── LGBTQSection.jsx
-│   │   │   ├── PrivateRoutes.jsx
-            ├── BoardSection.jsx
+│   │   │   ├── BoardSection.jsx
+│   │   │   └── PrivateRoutes.jsx
 │   │   ├── pages/
 │   │   │   ├── HomePage.jsx
-│   │   │   ├── Dashboard.jsx
+│   │   │   └── Dashboard.jsx
+            └── PrivacyPage.jsx
+        ├──  styles/
+│   │   │   
 │   │   ├── App.jsx
-│   │   ├── index.js
+│   │   └── index.js
 │   └── package.json
+
 
 ## 🧪 Come eseguire l'app
 
