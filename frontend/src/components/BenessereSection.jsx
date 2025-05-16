@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import '../styles/BenessereSection.css';
 
 
 const BenessereSection = () => {
@@ -42,14 +43,14 @@ const BenessereSection = () => {
       title: "Parla con un Esperto",
       image: "../assets/psicologo.webp",
       text: "Psicologi, ostetriche e counselor a portata di click.",
-      link: "https://www.mammamiahelp.it/" // piattaforma di supporto per neogenitori
+      link: "https://themamacoach.com/?utm_source=chatgpt.com" // piattaforma di supporto per neogenitori
     }
   ];
 
   return (
     <section id="benessere" className="py-5 bg-light" data-aos="fade-right">
       <div className="container position-relative">
-        <h2 className="mb-3">Benessere</h2>
+        <h2 className="mb-3 title-benessere">Benessere</h2>
         <p>
           Meditazioni guidate, esercizi dolci per il corpo e podcast per il supporto emotivo.
           Un angolo per prenderti cura di te mentre cresci tuo figlio.
@@ -57,7 +58,7 @@ const BenessereSection = () => {
 
         <button
           onClick={() => scroll('left')}
-          className="btn btn-primary position-absolute start-0 top-50 translate-middle-y z-3"
+          className="btn btn-warning position-absolute start-0 top-50 translate-middle-y z-3"
         >
           <FaArrowLeft />
         </button>
@@ -77,7 +78,7 @@ const BenessereSection = () => {
                   href={card.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-outline-primary btn-sm"
+                  className="btn btn-outline-warning btn-sm"
                 >
                   Vai →
                 </a>
@@ -88,7 +89,7 @@ const BenessereSection = () => {
 
         <button
           onClick={() => scroll('right')}
-          className="btn btn-primary position-absolute end-0 top-50 translate-middle-y z-3"
+          className="btn btn-warning  position-absolute end-0 top-50 translate-middle-y z-3"
         >
           <FaArrowRight />
         </button>

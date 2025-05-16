@@ -20,62 +20,62 @@ const BabyCareSection = () => {
 
   const items = [
     {
-      img: "/images/why1.png",
+      img: "../assets/bagnetto.webp",
       title: "Come fare il bagnetto",
       body: "Usa acqua tiepida (circa 37°C) e un detergente delicato. Sostieni il bambino e lavalo con movimenti dolci.",
     },
     {
-      img: "/images/why2.png",
+      img: "../assets/pannolino.webp",
       title: "Come cambiare il pannolino",
       body: "Stendi il neonato su una superficie sicura. Pulisci con salviette o acqua tiepida, asciuga bene e applica crema protettiva. Posiziona il pannolino sotto il bambino con le linguette ai lati. Porta la parte anteriore tra le gambe e fissala con le linguette, senza stringere troppo.",
     },
     {
-      img: "/images/why3.png",
+      img: "../assets/temperatura.webp",
       title: "Come controllare la temperatura",
       body: "Usa un termometro digitale. La temperatura ideale per un neonato è tra 36,5°C e 37,5°C.",
     },
     {
-      img: "/images/why4.png",
+      img: "../assets/cordone.webp",
       title: "Come pulire il cordone ombelicale",
       body: "Pulisci delicatamente con una garza sterile inumidita, senza strofinare. Mantieni asciutto fino alla caduta naturale.",
     },
     {
-      img: "/images/why1.png",
+      img: "../assets/biberon1.webp",
       title: "Come preparare il biberon",
       body: "Lava bene le mani e sterilizza il biberon. Versa acqua bollita a 40°C, aggiungi il latte in polvere nelle dosi corrette e agita bene. Controlla la temperatura sul polso.",
     },
     {
-      img: "/images/why2.png",
+      img: "../assets/biberon2.webp",
       title: "Come pulire il biberon",
       body: "Smonta tutte le parti, lava con acqua calda e sapone delicato, usa uno scovolino. Sterilizza con bollitura o vapore.",
     },
     {
-      img: "/images/why3.png",
+      img: "../assets/pulire_culetto_bambino.webp",
       title: "Come pulire il culetto del neonato",
       body: "Usa acqua tiepida o salviette delicate. Tampona e asciuga bene. Applica crema barriera se necessario.",
     },
     {
-      img: "/images/why4.png",
+      img: "../assets/sviluppo.webp",
       title: "Come stimolare lo sviluppo del neonato",
       body: "Parla al bambino, cantagli canzoncine, mantieni il contatto visivo. Usa oggetti colorati e fai tummy time ogni giorno per rafforzare i muscoli. Il contatto e la voce dei genitori sono fondamentali.",
     },
     {
-      img: "/images/why1.png",
+      img: "../assets/linguaggio.webp",
       title: "Come favorire il linguaggio nel neonato",
       body: "Parla spesso con tono dolce. Nomina oggetti, ripeti suoni e leggi storie brevi. Rispondi ai suoi vocalizzi come fosse una conversazione.",
     },
     {
-      img: "/images/why2.png",
+      img: "../assets/unghie.webp",
       title: "Come tagliare le unghie del neonato",
       body: "Usa forbicine con punte arrotondate. Taglia mentre dorme, alla luce naturale. Fai tagli piccoli e dritti o lima le unghie per sicurezza.",
     },
     {
-      img: "/images/why3.png",
+      img: "../assets/culla.webp",
       title: "Come mantenere pulita la culla",
       body: "Cambia i lenzuolini 2–3 volte a settimana o in caso di rigurgiti. Usa detersivi delicati. Evita cuscini e peluche. Pulisci le sbarre con un panno umido.",
     },
     {
-      img: "/images/why4.png",
+      img: "../assets/coliche.webp",
       title: "Come calmare le coliche del neonato",
       body: "Massaggia dolcemente il pancino, tienilo in verticale dopo le poppate o prova la posizione pancia in giù sull’avambraccio. Consulta il pediatra se persistono.",
     },
@@ -86,7 +86,7 @@ const BabyCareSection = () => {
       <section id="neonato" className="py-5 bg-light" data-aos="fade-up">
         <div className="container">
           <div className="mb-5">
-            <h2>Cura del Bambino</h2>
+            <h2 className="title-babycare">Cura del Bambino</h2>
             <p className="text-muted">
               Dal pannolino al bagnetto: tutto ciò che devi sapere per prenderti
               cura del tuo neonato.

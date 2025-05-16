@@ -51,7 +51,7 @@ export default function HomePage() {
               L'app pensata per il post-partum e post-adozione per papà e
               famiglie LGBTQ+
             </p>
-            <a href="#neonato" className="btn btn-outline-light mt-3">
+            <a href="#neonato" className="btn btn-outline-light mt-3 btn-lg">
               Scopri le sezioni ↓
             </a>
           </div>
@@ -64,7 +64,7 @@ export default function HomePage() {
 
       <section id="lavoro" className="py-5" data-aos="fade-up">
         <div className="container">
-          <h2 className="mb-3">Ritorno al Lavoro</h2>
+          <h2 className="mb-3 title-lavoro">Ritorno al Lavoro</h2>
           <p>
             Suggerimenti su come rientrare al lavoro in modo graduale, gestione
             del tempo e consigli su congedi e diritti.
@@ -195,7 +195,7 @@ export default function HomePage() {
         <div className="container text-center">
           {/* Riga con testo + icone */}
           <div className="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3 mb-3">
-            <p className="mb-0 fw-bold">
+            <p className="mb-0 fw-bold text-footer">
               &copy; {new Date().getFullYear()} ParentUp - Tutti i diritti
               riservati - progetto sviluppato da Balia Katiuscia
             </p>

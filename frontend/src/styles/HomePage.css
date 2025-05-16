@@ -1,5 +1,5 @@
 .hero-section {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),url('/assets/hero.png'); /* cambia il path se necessario */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),url('/assets/hero.webp'); /* cambia il path se necessario */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -91,7 +91,7 @@ section {
 .spinner-logo .circle {
   width: 60px;
   height: 60px;
-  border: 6px solid #0d6efd;
+  border: 6px solid #f4b20b;
   border-top: 6px solid transparent;
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -114,10 +114,18 @@ section {
   to { opacity: 1; }
 }
 
+.title-lavoro{
+  margin-top: 60px;
+}
+
 
   footer a:hover {
-    color: #0d6efd;
+    color: #f4b20b;
     transition: color 0.2s ease-in-out;
+  }
+
+  .text-footer{
+    color: #FFF !important; 
   }
   
   footer svg {
