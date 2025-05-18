@@ -54,8 +54,16 @@ switch (true) {
         
         case $method === 'POST' && preg_match('/\/index\.php\/api\/logout$/', $uri):
             $userController->logout();
-            break;    
+            break;   
 
+        case $method === 'POST' && preg_match('/\/index\.php\/api\/recover-password$/', $uri):
+            $userController->recoverPassword();
+            break;
+        
+        case $method === 'POST' && preg_match('/\/index\.php\/api\/reset-password$/', $uri):
+            $userController->resetPassword();
+            break;
+            
     // --- POSTS ---
     case $method === 'GET' && preg_match('/\/index\.php\/api\/posts$/', $uri):
         $postController->getAll();

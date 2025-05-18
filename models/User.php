@@ -87,5 +87,13 @@ class User {
         return $stmt->execute();
     }
 
+    public function setPassword($id, $password) {
+        $query = "UPDATE $this->table SET password = ? WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $hash = password_hash($password, PASSWORD_BCRYPT);
+        $stmt->bind_param("si", $hash, $id);
+        return $stmt->execute();
+    }
+
     
 }

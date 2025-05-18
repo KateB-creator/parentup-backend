@@ -131,7 +131,7 @@ class UserController {
         $user->cognome = $data['cognome'];
         $user->email = $data['email'];
     
-        // Opzionale: imposta anche password, genere, data_nascita se presenti
+        
         $user->password = isset($data['password']) ? password_hash($data['password'], PASSWORD_BCRYPT) : null;
         $user->genere = $data['genere'] ?? null;
         $user->data_nascita = $data['data_nascita'] ?? null;
@@ -169,6 +169,57 @@ class UserController {
         } else {
             http_response_code(500);
             echo json_encode(["success" => false, "message" => "Errore durante l'aggiornamento"]);
+        }
+    }
+
+    // Recupero password (verifica esistenza email)
+    public function resetPassword() {
+        $data = json_decode(file_get_contents("php://input"), true);
+    
+        if (!isset($data['email']) || !isset($data['newPassword'])) {
+            http_response_code(400);
+            echo json_encode(["success" => false, "message" => "Email e nuova password sono obbligatorie"]);
+            return;
+        }
+    
+        $userModel = new User($this->conn);
+        $user = $userModel->getByEmail($data['email']);
+    
+        if ($user) {
+            $result = $userModel->setPassword($user['id'], $data['newPassword']);
+            if ($result) {
+                echo json_encode(["success" => true, "message" => "Password aggiornata con successo"]);
+            } else {
+                http_response_code(500);
+                echo json_encode(["success" => false, "message" => "Errore durante l'aggiornamento della password"]);
+            }
+        } else {
+            http_response_code(404);
+            echo json_encode(["success" => false, "message" => "Email non trovata"]);
+        }
+    }
+
+    public function recoverPassword() {
+        $data = json_decode(file_get_contents("php://input"), true);
+    
+        if (!isset($data['email'])) {
+            http_response_code(400);
+            echo json_encode(["success" => false, "message" => "Email obbligatoria"]);
+            return;
+        }
+    
+        $userModel = new User($this->conn);
+        $user = $userModel->getByEmail($data['email']);
+    
+        if ($user) {
+            echo json_encode([
+                "success" => true,
+                "message" => "Email trovata. Puoi procedere con il reset.",
+                "user_id" => $user['id']
+            ]);
+        } else {
+            http_response_code(404);
+            echo json_encode(["success" => false, "message" => "Email non trovata"]);
         }
     }
     
