@@ -16,6 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // --- SESSIONE ---
+ini_set('session.cookie_samesite', 'Lax');
+ini_set('session.cookie_secure', '0');
 session_start();
 
 // --- ROUTING ---
