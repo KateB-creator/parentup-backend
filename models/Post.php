@@ -12,10 +12,16 @@ class Post {
     }
 
     public function getAll() {
-        $query = "SELECT posts.*, users.nome as autore_nome
-                  FROM posts
-                  JOIN users ON posts.user_id = users.id
-                  ORDER BY posts.created_at DESC";
+        $query = "SELECT 
+            posts.id,
+            posts.title,
+            posts.content,
+            posts.user_id,
+            posts.created_at,
+            users.nome AS autore_nome
+          FROM posts
+          JOIN users ON posts.user_id = users.id
+          ORDER BY posts.created_at DESC";
     
         $stmt = $this->conn->prepare($query);
         $stmt->execute();

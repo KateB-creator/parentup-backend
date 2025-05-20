@@ -12,7 +12,18 @@ class Comment {
     }
 
     public function getAllByPostId($post_id) {
-        $query = "SELECT id, user_id, post_id, content, created_at FROM " . $this->table . " WHERE post_id = ? ORDER BY created_at ASC";
+        $query = "SELECT 
+                    comments.id,
+                    comments.user_id,
+                    comments.post_id,
+                    comments.content,
+                    comments.created_at,
+                    users.nome AS autore_commento
+                  FROM comments
+                  JOIN users ON comments.user_id = users.id
+                  WHERE comments.post_id = ?
+                  ORDER BY comments.created_at ASC";
+    
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $post_id);
         $stmt->execute();
@@ -24,7 +35,7 @@ class Comment {
         }
         return $comments;
     }
-
+    
     public function create() {
         $query = "INSERT INTO " . $this->table . " (user_id, post_id, content) VALUES (?, ?, ?)";
         $stmt = $this->conn->prepare($query);
