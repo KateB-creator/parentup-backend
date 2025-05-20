@@ -12,28 +12,26 @@ class Post {
     }
 
     public function getAll() {
-        $query = "SELECT id, user_id, title, content, created_at FROM posts ORDER BY created_at DESC";
-        $result = $this->conn->query($query);
+        $query = "SELECT posts.*, users.nome as autore_nome
+                  FROM posts
+                  JOIN users ON posts.user_id = users.id
+                  ORDER BY posts.created_at DESC";
     
-        $posts = [];
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-        while ($row = $result->fetch_assoc()) {
-            $post_id = $row['id'];
+        foreach ($posts as &$post) {
+            // carica i commenti per ogni post
+            $commentQuery = "SELECT comments.*, users.nome as autore_commento
+                             FROM comments
+                             JOIN users ON comments.user_id = users.id
+                             WHERE post_id = :post_id
+                             ORDER BY created_at ASC";
     
-            // Prendi i commenti associati con user_id incluso
-            $commentsQuery = "SELECT id, post_id, user_id, content, created_at FROM comments WHERE post_id = ? ORDER BY created_at ASC";
-            $stmt = $this->conn->prepare($commentsQuery);
-            $stmt->bind_param("i", $post_id);
-            $stmt->execute();
-            $commentsResult = $stmt->get_result();
-    
-            $comments = [];
-            while ($comment = $commentsResult->fetch_assoc()) {
-                $comments[] = $comment;
-            }
-    
-            $row['comments'] = $comments;
-            $posts[] = $row;
+            $commentStmt = $this->conn->prepare($commentQuery);
+            $commentStmt->execute(['post_id' => $post['id']]);
+            $post['comments'] = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
         }
     
         return $posts;

@@ -11,18 +11,16 @@ class Comment {
         $this->conn = $db;
     }
 
-    public function getAllByPostId($post_id) {
-        $query = "SELECT id, user_id, post_id, content, created_at FROM " . $this->table . " WHERE post_id = ? ORDER BY created_at ASC";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $post_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
+    public function getAllByPostId($postId) {
+        $query = "SELECT comments.*, users.nome as autore
+                  FROM comments
+                  JOIN users ON comments.user_id = users.id
+                  WHERE comments.post_id = :post_id
+                  ORDER BY comments.created_at ASC";
     
-        $comments = [];
-        while ($row = $result->fetch_assoc()) {
-            $comments[] = $row;
-        }
-        return $comments;
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute(['post_id' => $postId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function create() {
