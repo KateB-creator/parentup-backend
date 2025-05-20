@@ -17,9 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 // --- SESSIONE ---
 // In sviluppo (HTTP): NON usare Secure
-ini_set('session.cookie_samesite', 'Lax');     // o 'None' con HTTPS
-ini_set('session.cookie_secure', '0');         // solo '1' con HTTPS
-
+ini_set('session.cookie_samesite', 'None');
+ini_set('session.cookie_secure', '1');
 session_start();
 
 // --- ROUTING ---
