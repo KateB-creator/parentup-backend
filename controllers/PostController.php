@@ -9,9 +9,19 @@ class PostController {
     }
 
     public function getAll() {
-        $model = new Post($this->conn);
-        $posts = $model->getAll();
-        echo json_encode($posts);
+        try {
+            $model = new Post($this->conn);
+            $posts = $model->getAll();
+            echo json_encode($posts);
+        } catch (Throwable $e) {
+            http_response_code(500);
+            echo json_encode([
+                "error" => "Errore lato server",
+                "dettagli" => $e->getMessage(),
+                "file" => $e->getFile(),
+                "line" => $e->getLine()
+            ]);
+        }
     }
 
     public function getById($id) {
