@@ -64,7 +64,8 @@ class UserController {
                 'email' => $user['email'],
                 'exp' => time() + (60 * 60 * 24),
             ];
-    
+            
+            error_log("JWT_SECRET = " . ($_ENV['JWT_SECRET'] ?? 'NON DEFINITA'));
             $jwt = JWT::encode($payload, $_ENV['JWT_SECRET'], 'HS256');
     
             echo json_encode([
