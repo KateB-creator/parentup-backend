@@ -12,12 +12,12 @@ class Comment {
     }
 
     public function getAllByPostId($post_id) {
-        $query = "SELECT * FROM " . $this->table . " WHERE post_id = ? ORDER BY created_at ASC";
+        $query = "SELECT id, user_id, post_id, content, created_at FROM " . $this->table . " WHERE post_id = ? ORDER BY created_at ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $post_id);
         $stmt->execute();
         $result = $stmt->get_result();
-
+    
         $comments = [];
         while ($row = $result->fetch_assoc()) {
             $comments[] = $row;
