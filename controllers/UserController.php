@@ -45,9 +45,10 @@ class UserController {
 
     // LOGIN
     public function login() {
+        error_log("LOGIN richiesto");
         $data = json_decode(file_get_contents("php://input"), true);
-    
         if (!isset($data['email']) || !isset($data['password'])) {
+            error_log("Email o password mancanti");
             http_response_code(400);
             echo json_encode(["success" => false, "message" => "Email e password sono obbligatori"]);
             return;
@@ -57,10 +58,11 @@ class UserController {
         $user = $userModel->getByEmail($data['email']);
     
         if ($user && password_verify($data['password'], $user['password'])) {
+            error_log("Login OK, generazione token");
             $payload = [
                 'sub' => $user['id'],
                 'email' => $user['email'],
-                'exp' => time() + (60 * 60 * 24) // valido 24 ore
+                'exp' => time() + (60 * 60 * 24),
             ];
     
             $jwt = JWT::encode($payload, JWT_SECRET, 'HS256');
@@ -77,6 +79,7 @@ class UserController {
                 ]
             ]);
         } else {
+            error_log("Login fallito: credenziali errate");
             http_response_code(401);
             echo json_encode(["success" => false, "message" => "Credenziali non valide"]);
         }
