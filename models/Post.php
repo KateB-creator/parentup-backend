@@ -19,23 +19,26 @@ class Post {
     
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->get_result();
+        $posts = $result->fetch_all(MYSQLI_ASSOC);
     
         foreach ($posts as &$post) {
-            // carica i commenti per ogni post
             $commentQuery = "SELECT comments.*, users.nome as autore_commento
                              FROM comments
                              JOIN users ON comments.user_id = users.id
-                             WHERE post_id = :post_id
-                             ORDER BY created_at ASC";
+                             WHERE comments.post_id = ?
+                             ORDER BY comments.created_at ASC";
     
             $commentStmt = $this->conn->prepare($commentQuery);
-            $commentStmt->execute(['post_id' => $post['id']]);
-            $post['comments'] = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
+            $commentStmt->bind_param("i", $post['id']);
+            $commentStmt->execute();
+            $commentResult = $commentStmt->get_result();
+            $post['comments'] = $commentResult->fetch_all(MYSQLI_ASSOC);
         }
     
         return $posts;
     }
+    
 
     public function getById($id) {
         $query = "SELECT * FROM $this->table WHERE id = ?";
