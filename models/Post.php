@@ -12,7 +12,7 @@ class Post {
     }
 
     public function getAll() {
-        $query = "SELECT * FROM posts ORDER BY created_at DESC";
+        $query = "SELECT id, user_id, title, content, created_at FROM posts ORDER BY created_at DESC";
         $result = $this->conn->query($query);
     
         $posts = [];
@@ -20,8 +20,8 @@ class Post {
         while ($row = $result->fetch_assoc()) {
             $post_id = $row['id'];
     
-            // Prendi i commenti associati
-            $commentsQuery = "SELECT * FROM comments WHERE post_id = ? ORDER BY created_at ASC";
+            // Prendi i commenti associati con user_id incluso
+            $commentsQuery = "SELECT id, post_id, user_id, content, created_at FROM comments WHERE post_id = ? ORDER BY created_at ASC";
             $stmt = $this->conn->prepare($commentsQuery);
             $stmt->bind_param("i", $post_id);
             $stmt->execute();
