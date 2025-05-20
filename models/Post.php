@@ -12,31 +12,46 @@ class Post {
     }
 
     public function getAll() {
-        $query = "SELECT posts.*, users.nome as autore_nome
-                  FROM posts
-                  JOIN users ON posts.user_id = users.id
-                  ORDER BY posts.created_at DESC";
+        try {
+            $query = "SELECT posts.*, users.nome as autore_nome
+                      FROM posts
+                      JOIN users ON posts.user_id = users.id
+                      ORDER BY posts.created_at DESC";
     
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute();
+            $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-        foreach ($posts as &$post) {
-            // carica i commenti per ogni post
-            $commentQuery = "SELECT comments.*, users.nome as autore_commento
-                             FROM comments
-                             JOIN users ON comments.user_id = users.id
-                             WHERE post_id = :post_id
-                             ORDER BY created_at ASC";
+            foreach ($posts as &$post) {
+                if (!isset($post['id'])) {
+                    throw new Exception("Post senza ID trovato.");
+                }
     
-            $commentStmt = $this->conn->prepare($commentQuery);
-            $commentStmt->execute(['post_id' => $post['id']]);
-            $post['comments'] = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
+                $commentQuery = "SELECT comments.*, users.nome as autore_commento
+                                 FROM comments
+                                 JOIN users ON comments.user_id = users.id
+                                 WHERE comments.post_id = :post_id
+                                 ORDER BY comments.created_at ASC";
+    
+                $commentStmt = $this->conn->prepare($commentQuery);
+                $commentStmt->bindParam(':post_id', $post['id'], PDO::PARAM_INT);
+    
+                $commentStmt->execute();
+                $post['comments'] = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
+            }
+    
+            return $posts;
+    
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'error' => 'Errore durante il recupero dei post',
+                'dettagli' => $e->getMessage()
+            ]);
+            exit;
         }
-    
-        return $posts;
     }
-
+    
     public function getById($id) {
         $query = "SELECT * FROM $this->table WHERE id = ?";
         $stmt = $this->conn->prepare($query);
