@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/User.php';
-require_once __DIR__ . '/../libs/JWT.php'; // Assicurati che questo punti al file giusto
+require_once __DIR__ . '/../vendor/autoload.php'; // Assicurati che questo punti al file giusto
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
