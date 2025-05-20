@@ -56,6 +56,8 @@ Il progetto nasce con l'obiettivo di fornire strumenti pratici, emotivi e organi
 
 parentup/
 ├── backend/
+    ├── middleware/
+        ├── authMiddleware.php
 │   ├── controllers/
 │   │   ├── NotificationController.php
 │   │   ├── CommentController.php
@@ -71,7 +73,7 @@ parentup/
 │   ├── routes/
 │   │   └── api.php
 │   ├── index.php
-│   └── migration.sql
+│   └── parentup.sql
 │
 ├── frontend/
 │   ├── public/

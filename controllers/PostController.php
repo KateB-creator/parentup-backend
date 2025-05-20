@@ -20,15 +20,10 @@ class PostController {
         echo json_encode($post ?: ["message" => "Post non trovato"]);
     }
 
-    public function create() {
-        session_start();
-        if (!isset($_SESSION['user_id'])) {
-            http_response_code(401);
-            echo json_encode(["message" => "Accesso non autorizzato"]);
-            return;
-        }
-
+    // ✅ Riceve $userId da api.php (estratto dal token)
+    public function create($userId) {
         $data = json_decode(file_get_contents("php://input"), true);
+
         if (!isset($data['title']) || !isset($data['content'])) {
             http_response_code(400);
             echo json_encode(["message" => "title e content sono obbligatori"]);
@@ -36,7 +31,7 @@ class PostController {
         }
 
         $model = new Post($this->conn);
-        $model->user_id = $_SESSION['user_id'];
+        $model->user_id = $userId;
         $model->title = $data['title'];
         $model->content = $data['content'];
 
@@ -49,16 +44,10 @@ class PostController {
         }
     }
 
-    public function update($id) {
-        session_start();
-        if (!isset($_SESSION['user_id'])) {
-            http_response_code(401);
-            echo json_encode(["message" => "Non autorizzato"]);
-            return;
-        }
-
+    public function update($id, $userId) {
         $model = new Post($this->conn);
-        if (!$model->belongsToUser($id, $_SESSION['user_id'])) {
+
+        if (!$model->belongsToUser($id, $userId)) {
             http_response_code(403);
             echo json_encode(["message" => "Non puoi modificare questo post"]);
             return;
@@ -76,16 +65,10 @@ class PostController {
         }
     }
 
-    public function delete($id) {
-        session_start();
-        if (!isset($_SESSION['user_id'])) {
-            http_response_code(401);
-            echo json_encode(["message" => "Non autorizzato"]);
-            return;
-        }
-
+    public function delete($id, $userId) {
         $model = new Post($this->conn);
-        if (!$model->belongsToUser($id, $_SESSION['user_id'])) {
+
+        if (!$model->belongsToUser($id, $userId)) {
             http_response_code(403);
             echo json_encode(["message" => "Non puoi eliminare questo post"]);
             return;

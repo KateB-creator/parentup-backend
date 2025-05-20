@@ -8,38 +8,25 @@ class NotificationController {
         $this->conn = $db;
     }
 
-    // Recupera tutte le notifiche per un determinato utente
-    public function getAll() {
-        if (session_status() === PHP_SESSION_NONE) session_start();
-    
-        // DEBUG TEMPORANEO
-        error_log("SESSION USER_ID: " . ($_SESSION['user_id'] ?? 'nessuna'));
-    
-        if (!isset($_SESSION['user_id'])) {
-            http_response_code(401);
-            echo json_encode(["success" => false, "message" => "Non autorizzato"]);
-            return;
-        }
-    
+    // ✅ Recupera tutte le notifiche dell'utente autenticato
+    public function getAll($userId) {
         $model = new Notification($this->conn);
-        $notifications = $model->getAllByUserId($_SESSION['user_id']);
-    
+        $notifications = $model->getAllByUserId($userId);
         echo json_encode($notifications);
     }
-    
 
-    // Crea una nuova notifica per un utente
-    public function create() {
+    // ✅ Crea una nuova notifica per l'utente autenticato
+    public function create($userId) {
         $data = json_decode(file_get_contents("php://input"), true);
 
-        if (!isset($data['user_id']) || !isset($data['message'])) {
+        if (!isset($data['message'])) {
             http_response_code(400);
-            echo json_encode(["message" => "user_id e message sono obbligatori"]);
+            echo json_encode(["message" => "Il campo message è obbligatorio"]);
             return;
         }
 
         $model = new Notification($this->conn);
-        $model->user_id = $data['user_id'];
+        $model->user_id = $userId;
         $model->message = $data['message'];
 
         if ($model->create()) {
@@ -51,19 +38,11 @@ class NotificationController {
         }
     }
 
-    public function markAllAsRead() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-    
-        if (!isset($_SESSION['user_id'])) {
-            http_response_code(401);
-            echo json_encode(["success" => false, "message" => "Accesso non autorizzato"]);
-            return;
-        }
-    
+    // ✅ Segna tutte le notifiche come lette per l'utente autenticato
+    public function markAllAsRead($userId) {
         $model = new Notification($this->conn);
-        if ($model->markAllAsRead($_SESSION['user_id'])) {
+
+        if ($model->markAllAsRead($userId)) {
             echo json_encode(["success" => true, "message" => "Notifiche segnate come lette"]);
         } else {
             http_response_code(500);

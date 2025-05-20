@@ -5,16 +5,19 @@ require_once __DIR__ . '/../controllers/UserController.php';
 require_once __DIR__ . '/../controllers/PostController.php';
 require_once __DIR__ . '/../controllers/CommentController.php';
 require_once __DIR__ . '/../controllers/NotificationController.php';
+require_once __DIR__ . '/../middleware/authMiddleware.php'; 
 
 header("Content-Type: application/json");
 
-// Middleware per autenticazione
-function requireAuth() {
-    if (!isset($_SESSION['user_id'])) {
-        http_response_code(401);
-        echo json_encode(['error' => 'Non autorizzato']);
-        exit();
+// Middleware basato su token JWT
+function requireTokenAuth() {
+    $userId = getAuthenticatedUserId();
+    if (!$userId) {
+        http_response_code(403);
+        echo json_encode(['error' => 'Accesso negato: token non valido o mancante']);
+        exit;
     }
+    return $userId;
 }
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -40,12 +43,12 @@ switch (true) {
         break;
 
     case $method === 'PUT' && preg_match('/\/index\.php\/api\/users\/\d+$/', $uri):
-        requireAuth();
+        $userId = requireTokenAuth();
         $userController->update($id);
         break;
 
     case $method === 'DELETE' && preg_match('/\/index\.php\/api\/users\/\d+$/', $uri):
-        requireAuth();
+        $userId = requireTokenAuth();
         $userController->delete($id);
         break;
 
@@ -56,11 +59,11 @@ switch (true) {
     case $method === 'POST' && preg_match('/\/index\.php\/api\/login$/', $uri):
         $userController->login();
         break;
-        
+
+    // logout non necessario con JWT, ma puoi tenerlo per frontend
     case $method === 'POST' && preg_match('/\/index\.php\/api\/logout$/', $uri):
-        requireAuth();
-        $userController->logout();
-        break;   
+        echo json_encode(['message' => 'Logout gestito lato client con JWT']);
+        break;
 
     case $method === 'POST' && preg_match('/\/index\.php\/api\/recover-password$/', $uri):
         $userController->recoverPassword();
@@ -80,18 +83,18 @@ switch (true) {
         break;
 
     case $method === 'POST' && preg_match('/\/index\.php\/api\/posts$/', $uri):
-        requireAuth();
-        $postController->create();
+        $userId = requireTokenAuth();
+        $postController->create($userId);
         break;
 
     case $method === 'PUT' && preg_match('/\/index\.php\/api\/posts\/\d+$/', $uri):
-        requireAuth();
-        $postController->update($id);
+        $userId = requireTokenAuth();
+        $postController->update($id, $userId);
         break;
 
     case $method === 'DELETE' && preg_match('/\/index\.php\/api\/posts\/\d+$/', $uri):
-        requireAuth();
-        $postController->delete($id);
+        $userId = requireTokenAuth();
+        $postController->delete($id, $userId);
         break;
 
     // --- COMMENTI ---
@@ -100,34 +103,34 @@ switch (true) {
         break;
 
     case $method === 'POST' && preg_match('/\/index\.php\/api\/comments$/', $uri):
-        requireAuth();
-        $commentController->create();
+        $userId = requireTokenAuth();
+        $commentController->create($userId);
         break;
 
     case $method === 'PUT' && preg_match('/\/index\.php\/api\/comments\/\d+$/', $uri):
-        requireAuth();
-        $commentController->update($id);
+        $userId = requireTokenAuth();
+        $commentController->update($id, $userId);
         break;
 
     case $method === 'DELETE' && preg_match('/\/index\.php\/api\/comments\/\d+$/', $uri):
-        requireAuth();
-        $commentController->delete($id);
+        $userId = requireTokenAuth();
+        $commentController->delete($id, $userId);
         break;
 
     // --- NOTIFICHE ---
     case $method === 'GET' && preg_match('/\/index\.php\/api\/notifications$/', $uri):
-        requireAuth();
-        $notificationController->getAll();
+        $userId = requireTokenAuth();
+        $notificationController->getAll($userId);
         break;
     
     case $method === 'POST' && preg_match('/\/index\.php\/api\/notifications$/', $uri):
-        requireAuth();
-        $notificationController->create();
+        $userId = requireTokenAuth();
+        $notificationController->create($userId);
         break;
 
     case $method === 'PUT' && preg_match('/\/index\.php\/api\/notifications$/', $uri):
-        requireAuth();
-        $notificationController->markAllAsRead();
+        $userId = requireTokenAuth();
+        $notificationController->markAllAsRead($userId);
         break;
 
     // --- ROTTA NON TROVATA ---

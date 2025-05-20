@@ -4,6 +4,8 @@ require_once __DIR__ . '/../vendor/autoload.php'; // Carica Composer
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
+define('JWT_SECRET', $_ENV['JWT_SECRET']); // ✅ Aggiunto
+
 class Database {
     private $host;
     private $user;

@@ -1,5 +1,8 @@
 <?php
 require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../libs/JWT.php'; // Assicurati che questo punti al file giusto
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class UserController {
     private $conn;
@@ -54,17 +57,24 @@ class UserController {
         $user = $userModel->getByEmail($data['email']);
     
         if ($user && password_verify($data['password'], $user['password'])) {
-            if (session_status() === PHP_SESSION_NONE) {
-                session_start();
-            }
-            $_SESSION['user_id'] = $user['id'];
+            $payload = [
+                'sub' => $user['id'],
+                'email' => $user['email'],
+                'exp' => time() + (60 * 60 * 24) // valido 24 ore
+            ];
+    
+            $jwt = JWT::encode($payload, JWT_SECRET, 'HS256');
+    
             echo json_encode([
                 "success" => true,
                 "message" => "Login effettuato",
-                "user_id" => $user['id'],
-                "email" => $user['email'],
-                "nome" => $user['nome'],
-                "cognome" => $user['cognome']
+                "token" => $jwt,
+                "user" => [
+                    "id" => $user['id'],
+                    "email" => $user['email'],
+                    "nome" => $user['nome'],
+                    "cognome" => $user['cognome']
+                ]
             ]);
         } else {
             http_response_code(401);
@@ -150,13 +160,6 @@ class UserController {
     }
 
     public function update($id) {
-        if (session_status() === PHP_SESSION_NONE) session_start();
-        if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] != $id) {
-            http_response_code(403);
-            echo json_encode(["success" => false, "message" => "Non autorizzato"]);
-            return;
-        }
-    
         $data = json_decode(file_get_contents("php://input"), true);
         $email = $data['email'] ?? null;
         $password = isset($data['password']) && $data['password'] !== ''

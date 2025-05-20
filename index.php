@@ -1,6 +1,5 @@
 <?php
-// --- CORS ---
-// Aggiungi il dominio del frontend Netlify
+
 $allowed_origins = [
     'https://parentup.netlify.app',
     'http://localhost:5173' //  sviluppo locale

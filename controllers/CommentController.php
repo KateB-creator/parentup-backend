@@ -1,4 +1,4 @@
-<?php
+<?php 
 require_once __DIR__ . '/../models/Comment.php';
 
 class CommentController {
@@ -22,20 +22,21 @@ class CommentController {
         echo json_encode($comments);
     }
 
-    public function create() {
+    // ✅ riceve $userId dal token via api.php
+    public function create($userId) {
         $data = json_decode(file_get_contents("php://input"), true);
-    
-        if (!isset($data['post_id'], $data['content'], $data['user_id'])) {
+
+        if (!isset($data['post_id'], $data['content'])) {
             http_response_code(400);
-            echo json_encode(["message" => "post_id, content e user_id sono obbligatori"]);
+            echo json_encode(["message" => "post_id e content sono obbligatori"]);
             return;
         }
-    
+
         $model = new Comment($this->conn);
-        $model->user_id = $data['user_id'];
+        $model->user_id = $userId;
         $model->post_id = $data['post_id'];
         $model->content = $data['content'];
-    
+
         if ($model->create()) {
             http_response_code(201);
             echo json_encode(["success" => true, "message" => "Commento creato"]);
@@ -45,19 +46,11 @@ class CommentController {
         }
     }
 
-    public function update($id) {
-        session_start();
-        if (!isset($_SESSION['user_id'])) {
-            http_response_code(401);
-            echo json_encode(["message" => "Accesso non autorizzato"]);
-            return;
-        }
-
+    public function update($id, $userId) {
         $data = json_decode(file_get_contents("php://input"), true);
         $model = new Comment($this->conn);
 
-        // Verifica che il commento appartenga all’utente loggato
-        if (!$model->belongsToUser($id, $_SESSION['user_id'])) {
+        if (!$model->belongsToUser($id, $userId)) {
             http_response_code(403);
             echo json_encode(["message" => "Non puoi modificare questo commento"]);
             return;
@@ -73,16 +66,10 @@ class CommentController {
         }
     }
 
-    public function delete($id) {
-        session_start();
-        if (!isset($_SESSION['user_id'])) {
-            http_response_code(401);
-            echo json_encode(["message" => "Accesso non autorizzato"]);
-            return;
-        }
-
+    public function delete($id, $userId) {
         $model = new Comment($this->conn);
-        if (!$model->belongsToUser($id, $_SESSION['user_id'])) {
+
+        if (!$model->belongsToUser($id, $userId)) {
             http_response_code(403);
             echo json_encode(["message" => "Non puoi eliminare questo commento"]);
             return;
